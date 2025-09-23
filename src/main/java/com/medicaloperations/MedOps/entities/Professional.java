@@ -5,10 +5,20 @@ import java.util.Objects;
 
 import com.medicaloperations.MedOps.entities.enums.AccountStatus;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "tb_professional")
 public class Professional implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String email;
