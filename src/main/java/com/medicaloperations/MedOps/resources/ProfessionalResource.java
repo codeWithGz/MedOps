@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medicaloperations.MedOps.entities.Professional;
+import com.medicaloperations.MedOps.entities.enums.Specialty;
 import com.medicaloperations.MedOps.services.ProfessionalService;
 
 @RestController
@@ -30,5 +31,17 @@ public class ProfessionalResource {
 		Professional obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+    @GetMapping(value = "/specialty/{specialtyName}")
+    public ResponseEntity<List<Professional>> findBySpecialtyName(@PathVariable String specialtyName) {
+        try {
+            Specialty specialtyEnum = Specialty.valueOf(specialtyName.toUpperCase());
+            Integer specialtyCode = specialtyEnum.getCode();
+            List<Professional> list = service.findBySpecialty(specialtyCode);
+            return ResponseEntity.ok().body(list);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

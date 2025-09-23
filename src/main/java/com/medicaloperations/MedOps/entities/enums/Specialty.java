@@ -1,12 +1,12 @@
 package com.medicaloperations.MedOps.entities.enums;
 
-public enum AccountStatus {
+public enum Specialty {
 
-	ACTIVE(1), BLOCKED(2), PENDING(3);
-
+	CLINICO(1), ENFERMEIRO(2), AUXENFERMAGEM(3), DENTISTA(4), FARMACEUTICO(5);
+	
 	private int code;
 
-	private AccountStatus(int code) {
+	private Specialty(int code) {
 		this.code = code;
 	}
 
@@ -18,8 +18,8 @@ public enum AccountStatus {
 		this.code = code;
 	}
 
-	public static AccountStatus valueOf(int code) {
-		for (AccountStatus value : AccountStatus.values()) {
+	public static Specialty valueOf(int code) {
+		for (Specialty value : Specialty.values()) {
 			if (value.getCode() == code) {
 				return value;
 			}

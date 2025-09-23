@@ -24,7 +24,8 @@ public class ProfessionalService {
 		return obj.get();
 	}
 	
-	
-	
+    public List<Professional> findBySpecialty(Integer specialty) {
+        return repository.findBySpecialty(specialty);
+    }
 	
 }

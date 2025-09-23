@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import com.medicaloperations.MedOps.entities.enums.AccountStatus;
+import com.medicaloperations.MedOps.entities.enums.Specialty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,10 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "tb_professional")
-public class Professional implements Serializable{
+public class Professional implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -23,15 +23,18 @@ public class Professional implements Serializable{
 	private String name;
 	private String email;
 	private String password;
-	
+	private Integer specialty;
 	private Integer accountStatus;
 
-	public Professional() {}
-	
-	public Professional(Long id, String name, String email, String password, AccountStatus accountStatus) {
+	public Professional() {
+	}
+
+	public Professional(Long id, String name, Specialty specialty, String email, String password,
+			AccountStatus accountStatus) {
 		super();
 		this.id = id;
 		this.name = name;
+		setSpecialty(specialty);
 		this.email = email;
 		this.password = password;
 		setAccountStatus(accountStatus);
@@ -75,7 +78,17 @@ public class Professional implements Serializable{
 
 	public void setAccountStatus(AccountStatus accountStatus) {
 		if (accountStatus != null) {
-			this.accountStatus = accountStatus.getCode();			
+			this.accountStatus = accountStatus.getCode();
+		}
+	}
+
+	public Specialty getSpecialty() {
+		return Specialty.valueOf(specialty);
+	}
+
+	public void setSpecialty(Specialty specialty) {
+		if (specialty != null) {
+			this.specialty = specialty.getCode();
 		}
 	}
 
@@ -99,8 +112,7 @@ public class Professional implements Serializable{
 	@Override
 	public String toString() {
 		return "Professional [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password
-				+ ", accountStatus=" + accountStatus + "]";
+				+ ", specialty=" + specialty + ", accountStatus=" + accountStatus + "]";
 	}
-	
 
 }
