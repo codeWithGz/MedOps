@@ -1,8 +1,11 @@
 package com.medicaloperations.MedOps.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medicaloperations.MedOps.entities.enums.AccountStatus;
 import com.medicaloperations.MedOps.entities.enums.Specialty;
 
@@ -10,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,6 +30,10 @@ public class Professional implements Serializable {
 	private Integer specialty;
 	private Integer accountStatus;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "doctor")
+	private List<MedicalConsultation> consultations = new ArrayList<>();
+	
 	public Professional() {
 	}
 
@@ -90,6 +98,10 @@ public class Professional implements Serializable {
 		if (specialty != null) {
 			this.specialty = specialty.getCode();
 		}
+	}
+
+	public List<MedicalConsultation> getConsultations() {
+		return consultations;
 	}
 
 	@Override
