@@ -28,17 +28,21 @@ public class MedicalConsultation implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "doctorId")
-	private Professional doctor;
+	private Doctor doctor;
 	
+	@ManyToOne
+	@JoinColumn(name = "pacientId")
+	private Pacient pacient;
 	
 	public MedicalConsultation() {}
 
 
-	public MedicalConsultation(Long id, Instant moment, Professional doctor) {
+	public MedicalConsultation(Long id, Instant moment, Doctor doctor, Pacient pacient) {
 		super();
 		this.id = id;
 		this.moment = moment;
 		this.doctor = doctor;
+		this.pacient = pacient;
 	}
 
 
@@ -62,12 +66,12 @@ public class MedicalConsultation implements Serializable{
 	}
 
 
-	public Professional getDoctor() {
+	public Doctor getDoctor() {
 		return doctor;
 	}
 
 
-	public void setDoctor(Professional doctor) {
+	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
 	}
 

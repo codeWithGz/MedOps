@@ -9,35 +9,35 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medicaloperations.MedOps.entities.Professional;
+import com.medicaloperations.MedOps.entities.Doctor;
 import com.medicaloperations.MedOps.entities.enums.Specialty;
-import com.medicaloperations.MedOps.services.ProfessionalService;
+import com.medicaloperations.MedOps.services.DoctorService;
 
 @RestController
-@RequestMapping(value = "/professionals")
-public class ProfessionalResource {
+@RequestMapping(value = "/doctors")
+public class DoctorResource {
 
 	@Autowired
-	private ProfessionalService service;
+	private DoctorService service;
 
 	@GetMapping
-	public ResponseEntity<List<Professional>> findAll() {
-		List<Professional> list = service.findAll();
+	public ResponseEntity<List<Doctor>> findAll() {
+		List<Doctor> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Professional> findById(@PathVariable Long id) {
-		Professional obj = service.findById(id);
+	public ResponseEntity<Doctor> findById(@PathVariable Long id) {
+		Doctor obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
     @GetMapping(value = "/specialty/{specialtyName}")
-    public ResponseEntity<List<Professional>> findBySpecialtyName(@PathVariable String specialtyName) {
+    public ResponseEntity<List<Doctor>> findBySpecialtyName(@PathVariable String specialtyName) {
         try {
             Specialty specialtyEnum = Specialty.valueOf(specialtyName.toUpperCase());
             Integer specialtyCode = specialtyEnum.getCode();
-            List<Professional> list = service.findBySpecialty(specialtyCode);
+            List<Doctor> list = service.findBySpecialty(specialtyCode);
             return ResponseEntity.ok().body(list);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
