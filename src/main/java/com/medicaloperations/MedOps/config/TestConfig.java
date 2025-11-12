@@ -41,9 +41,9 @@ public class TestConfig implements CommandLineRunner {
 		Pacient p2 = new Pacient(null, "gz", "gz@email.com", "gzPass", AccountStatus.ACTIVE);
 		pacientRepository.saveAll(Arrays.asList(p1, p2));
 		
-		MedicalConsultation c1 = new MedicalConsultation(null, Instant.parse("2019-06-20T10:00:00Z"), d1, p1);
-		MedicalConsultation c2 = new MedicalConsultation(null, Instant.parse("2019-06-20T10:30:00Z"), d1, p2);
-		MedicalConsultation c3 = new MedicalConsultation(null, Instant.parse("2019-06-20T10:00:00Z"), d2, p2);
+		MedicalConsultation c1 = new MedicalConsultation(null, Instant.parse("2019-06-20T10:00:00Z"), d1, p1, "motivo tal", "dengue");
+		MedicalConsultation c2 = new MedicalConsultation(null, Instant.parse("2019-06-20T10:30:00Z"), d1, p2, "motivo tal", "hepatite");
+		MedicalConsultation c3 = new MedicalConsultation(null, Instant.parse("2019-06-20T10:00:00Z"), d2, p2, "motivo tal", "h1n1");
 		consultationRepository.saveAll(Arrays.asList(c1, c2, c3));
 			
 	}

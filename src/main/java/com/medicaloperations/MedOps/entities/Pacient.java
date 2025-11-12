@@ -33,6 +33,9 @@ public class Pacient implements Serializable {
 	@OneToMany(mappedBy = "pacient")
 	private List<MedicalConsultation> consultations = new ArrayList<>();
 	
+	private List<Long> consultationsIds = new ArrayList<>();
+	
+		
 	public Pacient() {
 	}
 
@@ -44,6 +47,7 @@ public class Pacient implements Serializable {
 		this.email = email;
 		this.password = password;
 		setAccountStatus(accountStatus);
+		
 	}
 
 	public Long getId() {
@@ -91,6 +95,17 @@ public class Pacient implements Serializable {
 
 	public List<MedicalConsultation> getConsultations() {
 		return consultations;
+	}
+	
+	
+
+	public List<Long> getConsultationsIds() {
+		
+		for (MedicalConsultation m : consultations) {
+			consultationsIds.add(m.getId());
+		}
+		
+		return consultationsIds;
 	}
 
 	@Override

@@ -34,15 +34,24 @@ public class MedicalConsultation implements Serializable{
 	@JoinColumn(name = "pacientId")
 	private Pacient pacient;
 	
+	private String motive;
+	private String diagnosis;
+	
+	
+	
+	
 	public MedicalConsultation() {}
 
 
-	public MedicalConsultation(Long id, Instant moment, Doctor doctor, Pacient pacient) {
+	public MedicalConsultation(Long id, Instant moment, Doctor doctor, Pacient pacient, String motive, String diagnosis) {
 		super();
 		this.id = id;
 		this.moment = moment;
 		this.doctor = doctor;
 		this.pacient = pacient;
+		
+		this.motive = motive;
+		this.diagnosis = diagnosis;
 	}
 
 
@@ -73,6 +82,36 @@ public class MedicalConsultation implements Serializable{
 
 	public void setDoctor(Doctor doctor) {
 		this.doctor = doctor;
+	}
+
+
+	public Pacient getPacient() {
+		return pacient;
+	}
+
+
+	public void setPacient(Pacient pacient) {
+		this.pacient = pacient;
+	}
+
+
+	public String getMotive() {
+		return motive;
+	}
+
+
+	public void setMotive(String motive) {
+		this.motive = motive;
+	}
+
+
+	public String getDiagnosis() {
+		return diagnosis;
+	}
+
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
 	}
 
 
