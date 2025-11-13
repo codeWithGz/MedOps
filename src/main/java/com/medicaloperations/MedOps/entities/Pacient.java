@@ -97,8 +97,6 @@ public class Pacient implements Serializable {
 		return consultations;
 	}
 	
-	
-
 	public List<Long> getConsultationsIds() {
 		
 		for (MedicalConsultation m : consultations) {

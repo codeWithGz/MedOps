@@ -27,5 +27,9 @@ public class DoctorService {
     public List<Doctor> findBySpecialty(Integer specialty) {
         return repository.findBySpecialty(specialty);
     }
+    
+    public Doctor insert(Doctor doc) {
+    	return repository.save(doc);
+    }
 	
 }

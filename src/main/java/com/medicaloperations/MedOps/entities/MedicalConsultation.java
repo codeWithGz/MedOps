@@ -37,9 +37,6 @@ public class MedicalConsultation implements Serializable{
 	private String motive;
 	private String diagnosis;
 	
-	
-	
-	
 	public MedicalConsultation() {}
 
 
@@ -132,8 +129,6 @@ public class MedicalConsultation implements Serializable{
 		MedicalConsultation other = (MedicalConsultation) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
+
 	
 }
