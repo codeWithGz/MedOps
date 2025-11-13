@@ -36,5 +36,16 @@ public class DoctorService {
     	repository.deleteById(id);
     }
     
+    public Doctor update(Long id, Doctor doc) {
+    	Doctor updatedDoctor = repository.getReferenceById(id);
+    	updateData(updatedDoctor, doc);
+    	return repository.save(updatedDoctor);
+    }
+
+	private void updateData(Doctor updatedDoctor, Doctor doc) {
+		updatedDoctor.setName(doc.getName());
+		updatedDoctor.setEmail(doc.getEmail());	
+	}
+    
 	
 }
