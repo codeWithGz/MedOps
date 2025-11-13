@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.medicaloperations.MedOps.entities.Doctor;
 import com.medicaloperations.MedOps.repositories.DoctorRepository;
+import com.medicaloperations.MedOps.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class DoctorService {
@@ -21,7 +22,7 @@ public class DoctorService {
 	
 	public Doctor findById(Long Id) {
 		Optional<Doctor> obj = repository.findById(Id);
-		return obj.get();
+		return obj.orElseThrow(()-> new ResourceNotFoundException(Id));
 	}
 	
     public List<Doctor> findBySpecialty(Integer specialty) {
