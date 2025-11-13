@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.medicaloperations.MedOps.entities.Pacient;
 import com.medicaloperations.MedOps.repositories.PacientRepository;
+import com.medicaloperations.MedOps.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class PacientService {
@@ -20,7 +21,7 @@ public class PacientService {
 	
 	public Pacient findById(Long Id) {
 		Optional<Pacient> obj = repository.findById(Id);
-		return obj.get();
+		return obj.orElseThrow(()-> new ResourceNotFoundException(Id));
 	}
 	
 	
