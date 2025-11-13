@@ -31,5 +31,10 @@ public class DoctorService {
     public Doctor insert(Doctor doc) {
     	return repository.save(doc);
     }
+    
+    public void delete(Long id) {
+    	repository.deleteById(id);
+    }
+    
 	
 }
