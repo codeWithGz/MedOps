@@ -3,11 +3,16 @@ package com.medicaloperations.MedOps.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.medicaloperations.MedOps.entities.Doctor;
 import com.medicaloperations.MedOps.repositories.DoctorRepository;
+import com.medicaloperations.MedOps.services.exceptions.DatabaseException;
 import com.medicaloperations.MedOps.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -34,7 +39,15 @@ public class DoctorService {
     }
     
     public void delete(Long id) {
-    	repository.deleteById(id);
+    	
+    	try {
+    		repository.deleteById(id);			
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+    	
     }
     
     public Doctor update(Long id, Doctor doc) {
