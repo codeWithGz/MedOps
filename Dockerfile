@@ -3,7 +3,7 @@ FROM ubuntu:latest AS build
 
 RUN apt-get update && apt-get install -y openjdk-17-jdk maven
 
-WORKDIR /app
+WORKDIR /MedOps
 
 COPY . .
 
@@ -13,7 +13,7 @@ RUN mvn clean install -DskipTests
 # ----- STAGE 2: RUNTIME -----
 FROM eclipse-temurin:17-jdk
 
-WORKDIR /app
+WORKDIR /MedOps
 
 EXPOSE 8080
 
