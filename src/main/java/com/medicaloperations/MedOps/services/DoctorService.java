@@ -3,8 +3,6 @@ package com.medicaloperations.MedOps.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,6 +12,8 @@ import com.medicaloperations.MedOps.entities.Doctor;
 import com.medicaloperations.MedOps.repositories.DoctorRepository;
 import com.medicaloperations.MedOps.services.exceptions.DatabaseException;
 import com.medicaloperations.MedOps.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class DoctorService {
@@ -51,14 +51,23 @@ public class DoctorService {
     }
     
     public Doctor update(Long id, Doctor doc) {
-    	Doctor updatedDoctor = repository.getReferenceById(id);
-    	updateData(updatedDoctor, doc);
-    	return repository.save(updatedDoctor);
+    	
+    	try {
+    		Doctor updatedDoctor = repository.getReferenceById(id);
+    		updateData(updatedDoctor, doc);
+    		return repository.save(updatedDoctor);	
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+    	
+    	
     }
 
 	private void updateData(Doctor updatedDoctor, Doctor doc) {
-		updatedDoctor.setName(doc.getName());
-		updatedDoctor.setEmail(doc.getEmail());	
+			updatedDoctor.setName(doc.getName());
+			updatedDoctor.setEmail(doc.getEmail());				
+
+		
 	}
     
 	
