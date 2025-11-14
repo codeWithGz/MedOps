@@ -1,24 +1,20 @@
-# ----- STAGE 1: BUILD -----
-FROM ubuntu:latest AS build
-
-RUN apt-get update && apt-get install -y openjdk-17-jdk maven
+FROM maven:3.9.8-eclipse-temurin-17 AS build
 
 WORKDIR /MedOps
 
-COPY . .
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-RUN mvn clean install -DskipTests
+COPY src ./src
 
+RUN mvn clean package -DskipTests
 
-# ----- STAGE 2: RUNTIME -----
 FROM eclipse-temurin:17-jdk
 
 WORKDIR /MedOps
 
-EXPOSE 8080
-
-# Ajuste o nome do jar conforme o gerado no target/
 COPY --from=build /MedOps/target/MedOps-0.0.1-SNAPSHOT.jar app.jar
 
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
