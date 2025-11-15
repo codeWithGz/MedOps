@@ -8,15 +8,17 @@ public class WebController {
 
     @GetMapping("/")
     public String welcome() {
-
         return "home"; 
     }
     
-    @GetMapping("/doctorpost")
-    public String postDoctor() {
-
-        return "doctorpost"; 
+    @GetMapping("/createaccount")
+    public String createAccount() {
+        return "createaccount"; 
     }
     
+    @GetMapping("/forgotpassword")
+    public String reset_password() {
+        return "forgotpassword"; 
+    }
     
 }
