@@ -11,4 +11,12 @@ public class WebController {
 
         return "home"; 
     }
+    
+    @GetMapping("/doctorpost")
+    public String postDoctor() {
+
+        return "doctorpost"; 
+    }
+    
+    
 }

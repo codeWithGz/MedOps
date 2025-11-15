@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Doutor</title>
+</head>
+<body>
+    <h1>Cadastro de Novo Doutor</h1>
+    <p>Preencha o formulário e clique para registrar o Doctor.</p>
+    
+    <form id="doctorForm">
+        <div>
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" placeholder="Name">
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="xpto@email.com">
+        </div>
+        <div>
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" placeholder="Password">
+        </div>
+		<div>
+		    <label for="specialty">SELECIONE A Especialidade:</label>
+		    <select id="specialty" name="specialty" required>
+		        <option value="CLINICO">Clínico Geral</option>
+		        <option value="ENFERMEIRO">ENFERMEIRO</option>
+		        <option value="AUXENFERMAGEM">AUXILIAR DE ENFERMAGEM</option>
+		        <option value="DENTISTA">DENTISTA</option>
+		        <option value="FARMACEUTICO">FARMACEUTICO</option>
+		        </select>
+		</div> 
+        <div>
+            <label for="accountStatus">SELECIONE O STATUS DA CONTA:</label>
+			
+			<select id="accountStatus" name="accountStatus" required>
+			    <option value="ACTIVE">ATIVA</option>
+			    <option value="BLOCKED">BLOQUEADA</option>
+			    <option value="PENDING">PENDENET</option>
+			    </select>
+			
+        </div>
+        
+        <button type="submit">
+            Registrar Doctor
+        </button>
+    </form>
+
+    <p id="statusMessage"></p>
+
+    <script>
+        document.getElementById('doctorForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            const form = event.target;
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = "Enviando dados...";
+            statusElement.style.color = 'orange';
+
+            
+            const doctorData = {
+                "name": form.name.value,
+                "email": form.email.value,
+                "password": form.password.value,
+                "specialty": form.specialty.value.toUpperCase(),
+                "accountStatus": form.accountStatus.value.toUpperCase() 
+            };
+
+            
+            fetch('/doctors', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify(doctorData)
+            })
+            .then(response => {
+                
+                if (response.ok) {
+                    return response.json(); 
+                } else {
+                    return response.text().then(text => {
+                        throw new Error('Erro na requisição: Status ' + response.status + ' - ' + text);
+                    });
+                }
+            })
+            .then(doctorObj => {
+                statusElement.textContent = "SUCESSO! Doctor " + doctorObj.name + " registrado com ID: " + doctorObj.id;
+                statusElement.style.color = 'green';
+                form.reset();
+            })
+            .catch(error => {
+                console.error("Erro:", error);
+                statusElement.textContent = "ERRO: Não foi possível registrar o Doctor. Detalhe: " + error.message.substring(0, 100) + "...";
+                statusElement.style.color = 'red';
+            });
+        });
+    </script>
+</body>
+</html>
