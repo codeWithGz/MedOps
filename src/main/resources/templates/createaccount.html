@@ -340,40 +340,49 @@
                     <span class="line1">Seja Bem Vindo ao</span>
                     <span class="line2">Medical Operations</span>
                 </div>
-
+			<form id="createAccountForm">
 				<!-- Campo Nome -->
 				<div class="form-field">
 				    <label class="form-label">Nome</label>
-				    <input type="text" class="form-input">
+				    <input type="text" class="form-input" id="name" name="name" required>
 				</div>
 				
                 <!-- Campo Usuário -->
                 <div class="form-field">
-                    <label class="form-label">Usuário</label>
-                    <input type="text" class="form-input">
+                    <label class="form-label">Email</label>
+                    <input type="text" class="form-input" id="email" name="email" required>
                 </div>
 
                 <!-- Campo Senha -->
                 <div class="form-field">
                     <label class="form-label">Senha</label>
-                    <input type="password" class="form-input">
+                    <input type="password" class="form-input" id="password" name="password" required>
                 </div>
 				
 				<!-- Campo Confirmar Senha -->
 				<div class="form-field">
 				    <label class="form-label">Confirme a Senha</label>
-				    <input type="password" class="form-input">
+				    <input type="password" class="form-input" id="confirmPassword" required>
 				</div>
 
 
                 <!-- Botão Login -->
-                <button class="btn-login">
+                <button type="submit" class="btn-login">
                     <span class="btn-login-text">Criar Conta</span>
                 </button>
+				</form>
+				<p id="statusMessage" style="text-align: center; margin-top: 20px; font-weight: bold;"></p>
+
+				    <a href="/" class="create-account">
+				        <span class="create-account-text">Voltar para Login</span>
+				    </a>
+				
 
             </div>
         </div>
     </div>
+	
+	<script src="/js/pacient-register.js"></script>
 	
 </body>
 </html>
