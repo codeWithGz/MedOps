@@ -11,6 +11,11 @@ public class WebController {
         return "home"; 
     }
     
+    @GetMapping("/pacientpannel")
+    public String pacientPannel() {
+        return "pacientpannel"; 
+    }
+    
     @GetMapping("/createaccount")
     public String createAccount() {
         return "createaccount"; 

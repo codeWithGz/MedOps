@@ -1,0 +1,119 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Righteous', sans-serif;
+    background-color: white;
+    min-height: 100vh;
+}
+
+/* Layout Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #d73d48;
+    padding: 24px;
+}
+
+.greeting {
+    font-family: 'Righteous', sans-serif;
+    font-style: normal;
+    color: black;
+    font-size: 1rem;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 24px;
+}
+
+.title {
+    font-family: 'Righteous', sans-serif;
+    font-style: normal;
+    color: black;
+    margin-bottom: 32px;
+    font-size: 1.5rem;
+}
+
+/* Cards Grid */
+.cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+.card {
+    background-color: #d9d9d9;
+    border-radius: 16px;
+    height: 400px;
+}
+
+/* Tablets - 768px and up */
+@media (min-width: 768px) {
+    .sidebar {
+        padding: 32px;
+    }
+
+    .main-content {
+        padding: 32px;
+    }
+
+    .title {
+        margin-bottom: 48px;
+        font-size: 1.875rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+    }
+
+    .card {
+        height: 500px;
+    }
+
+    /* Card 3 spans 2 columns on tablet */
+    .card-3 {
+        grid-column: span 2;
+    }
+}
+
+/* Desktop - 1024px and up */
+@media (min-width: 1024px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 300px;
+        min-height: 100vh;
+        padding: 36px;
+    }
+
+    .main-content {
+        padding: 36px;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .card {
+        height: 870px;
+    }
+
+    /* Card 3 only takes 1 column on desktop */
+    .card-3 {
+        grid-column: span 1;
+    }
+}

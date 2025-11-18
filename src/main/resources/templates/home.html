@@ -1,384 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical Operations - Login</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Sarala:wght@700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Medical Operations - Login</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Sarala:wght@700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="/css/homestyle.css" type="text/css">
 
-        body {
-            font-family: 'Sarala', sans-serif;
-            background: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Lado esquerdo vermelho */
-        .left-panel {
-            flex: 0 0 47%;
-            background: #d73d48;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            position: relative;
-        }
-
-        /* Logo/Imagem */
-        .logo-container {
-            max-width: 589px;
-            width: 100%;
-            height: auto;
-        }
-
-        .logo-container img {
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-        }
-
-        /* Lado direito - Formulário */
-        .right-panel {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
-
-        .form-container {
-            width: 100%;
-            max-width: 634px;
-        }
-
-        .welcome-text {
-            margin-bottom: 60px;
-            font-family: 'Righteous', cursive;
-            font-style: normal;
-            line-height: 1.2;
-            color: black;
-        }
-
-        .welcome-text .line1 {
-            font-size: clamp(24px, 4vw, 36px);
-            display: block;
-        }
-
-        .welcome-text .line2 {
-            font-size: clamp(28px, 5vw, 45px);
-            display: block;
-        }
-
-        /* Form Fields */
-        .form-field {
-            margin-bottom: 30px;
-        }
-
-        .form-label {
-            font-family: 'Sarala', sans-serif;
-            font-weight: 700;
-            font-size: clamp(24px, 3vw, 36px);
-            line-height: normal;
-            color: black;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .form-input {
-            width: 100%;
-            height: 55px;
-            background: rgba(249, 109, 63, 0.65);
-            border-radius: 8px;
-            border: none;
-            padding: 0 15px;
-            font-size: 18px;
-        }
-
-        .form-input:focus {
-            outline: none;
-            background: rgba(249, 109, 63, 0.75);
-        }
-
-        /* Checkbox e Esqueceu Senha */
-        .options-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .checkbox-icon {
-            width: 37px;
-            height: 37px;
-            flex-shrink: 0;
-        }
-
-        .checkbox-label {
-            font-family: 'Sarala', sans-serif;
-            font-weight: 700;
-            font-size: 18px;
-            color: black;
-        }
-
-        .forgot-password {
-            background: #e2bd98;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-            padding: 10px 20px;
-            height: 37px;
-        }
-
-        .forgot-password-text {
-            font-family: 'Sarala', sans-serif;
-            font-weight: 700;
-            font-size: 18px;
-            color: black;
-            white-space: nowrap;
-        }
-
-        /* Botão Login */
-        .btn-login {
-            width: 100%;
-            height: 72px;
-            background: #f96d3f;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 15px;
-            transition: background 0.3s;
-        }
-
-        .btn-login:hover {
-            background: #e85d2f;
-        }
-
-        .btn-login-text {
-            font-family: 'Sarala', sans-serif;
-            font-weight: 700;
-            font-size: 26px;
-            color: white;
-        }
-
-        /* Link Criar Conta */
-        .create-account {
-            width: 100%;
-            background: rgba(226, 189, 152, 0);
-            border: 1px solid black;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            text-decoration: none;
-            cursor: pointer;
-            min-height: 48px;
-            transition: background 0.3s;
-        }
-
-        .create-account:hover {
-            background: rgba(226, 189, 152, 0.1);
-        }
-
-        .create-account-text {
-            font-family: 'Sarala', sans-serif;
-            font-weight: 700;
-            font-size: clamp(16px, 2vw, 20px);
-            line-height: normal;
-            color: black;
-            text-align: center;
-        }
-
-        /* Tablet */
-        @media (max-width: 1024px) {
-            .left-panel {
-                flex: 0 0 40%;
-            }
-
-            .logo-container {
-                max-width: 400px;
-            }
-
-            .form-container {
-                max-width: 500px;
-            }
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-
-            .left-panel {
-                flex: none;
-                min-height: 300px;
-                padding: 30px;
-            }
-
-            .logo-container {
-                max-width: 300px;
-            }
-
-            .right-panel {
-                padding: 30px 20px;
-            }
-
-            .form-container {
-                max-width: 100%;
-            }
-
-            .welcome-text {
-                margin-bottom: 40px;
-            }
-
-            .form-field {
-                margin-bottom: 20px;
-            }
-
-            .options-row {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-                margin-bottom: 30px;
-            }
-
-            .forgot-password {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .forgot-password-text {
-                white-space: normal;
-                text-align: center;
-            }
-
-            .btn-login {
-                height: 60px;
-            }
-
-            .checkbox-label {
-                font-size: 16px;
-            }
-        }
-
-        /* Small Mobile */
-        @media (max-width: 480px) {
-            .left-panel {
-                min-height: 200px;
-                padding: 20px;
-            }
-
-            .logo-container {
-                max-width: 200px;
-            }
-
-            .right-panel {
-                padding: 20px 15px;
-            }
-
-            .welcome-text {
-                margin-bottom: 30px;
-            }
-
-            .form-input {
-                height: 50px;
-                font-size: 16px;
-            }
-
-            .btn-login {
-                height: 56px;
-            }
-
-            .checkbox-icon {
-                width: 30px;
-                height: 30px;
-            }
-        }
-    </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Painel esquerdo vermelho -->
-        <div class="left-panel">
-            <div class="logo-container">
-                <img src="/images/logo.png" alt="Medical a a ">
-            </div>
-        </div>
+	<div class="container">
+		<!-- Painel esquerdo vermelho -->
+		<div class="left-panel">
+			<div class="logo-container">
+				<img src="/images/logo.png" alt="Medical a a ">
+			</div>
+		</div>
 
-        <!-- Painel direito - Formulário -->
-        <div class="right-panel">
-            <div class="form-container">
-                <!-- Texto de boas-vindas -->
-                <div class="welcome-text">
-                    <span class="line1">Seja Bem Vindo ao</span>
-                    <span class="line2">Medical Operations</span>
-                </div>
 
-                <!-- Campo Usuário -->
-                <div class="form-field">
-                    <label class="form-label">Usuário</label>
-                    <input type="text" class="form-input">
-                </div>
 
-                <!-- Campo Senha -->
-                <div class="form-field">
-                    <label class="form-label">Senha</label>
-                    <input type="password" class="form-input">
-                </div>
+		<!-- Painel direito - Formulário -->
+		<div class="right-panel">
+			<div class="form-container">
+				<!-- Texto de boas-vindas -->
+				<div class="welcome-text">
+					<span class="line1">Seja Bem Vindo ao</span>
+					<span class="line2">Medical Operations</span>
+				</div>
 
-                <!-- Checkbox e Esqueceu Senha -->
-                <div class="options-row">
-                    <div class="checkbox-container">
-                        <svg class="checkbox-icon" fill="none" preserveAspectRatio="none" viewBox="0 0 37 37">
-                            <path d="M5.55 11.1C5.55 9.62805 6.13473 8.21638 7.17556 7.17556C8.21638 6.13473 9.62805 5.55 11.1 5.55H25.9C27.372 5.55 28.7836 6.13473 29.8244 7.17556C30.8653 8.21638 31.45 9.62805 31.45 11.1V25.9C31.45 27.372 30.8653 28.7836 29.8244 29.8244C28.7836 30.8653 27.372 31.45 25.9 31.45H11.1C9.62805 31.45 8.21638 30.8653 7.17556 29.8244C6.13473 28.7836 5.55 27.372 5.55 25.9V11.1ZM11.1 8.325C10.364 8.325 9.65819 8.61737 9.13778 9.13778C8.61737 9.65819 8.325 10.364 8.325 11.1V25.9C8.325 26.636 8.61737 27.3418 9.13778 27.8622C9.65819 28.3826 10.364 28.675 11.1 28.675H25.9C26.636 28.675 27.3418 28.3826 27.8622 27.8622C28.3826 27.3418 28.675 26.636 28.675 25.9V11.1C28.675 10.364 28.3826 9.65819 27.8622 9.13778C27.3418 8.61737 26.636 8.325 25.9 8.325H11.1Z" fill="black"/>
-                        </svg>
-                        <span class="checkbox-label">Salvar Login</span>
-                    </div>
 
-					<a href="/forgotpassword" class="forgot-password" role="button">
-                        <span class="forgot-password-text">Esqueceu sua Senha?</span>
-                    </a>
-                </div>
+				<form id="loginForm">
+					<!-- Campo Usuário -->
+					<div class="form-field">
+						<label for="email" class="form-label">Usuário</label>
+						<input type="email" id="email" name="email" class="form-input" required>
+					</div>
 
-                <!-- Botão Login -->
-                <button class="btn-login">
-                    <span class="btn-login-text">Login</span>
-                </button>
+					<!-- Campo Senha -->
+					<div class="form-field">
+						<label for="password" class="form-label">Senha</label>
+						<input type="password" id="password" name="password" class="form-input" required>
+					</div>
 
-                <!-- Link Criar Conta -->
-                <a href="/createaccount" class="create-account">
-                    <p class="create-account-text">Ainda não está Registrado? Crie uma Conta!</p>
-                </a>
-            </div>
-        </div>
-    </div>
+					<div class="form-field">
+						<p id="statusMessage" style="color: #d73d48; font-weight: bold;"></p>
+					</div>
+
+					<!-- Checkbox e Esqueceu Senha -->
+					<div class="options-row">
+						<div class="checkbox-container">
+							<input type="checkbox"> <span class="checkbox-label">Salvar Login</span>
+						</div>
+
+						<a href="/forgotpassword" class="forgot-password" role="button">
+							<span class="forgot-password-text">Esqueceu sua Senha?</span>
+						</a>
+					</div>
+
+					<!-- Botão Login -->
+					<button type="submit" class="btn-login">
+						<span class="btn-login-text">Login</span>
+					</button>
+
+				</form>
+				<!-- Link Criar Conta -->
+				<a href="/createaccount" class="create-account">
+					<p class="create-account-text">Ainda não está Registrado? Crie uma Conta!</p>
+				</a>
+
+			</div>
+		</div>
+
+
+	</div>
+
+	<script src="/js/login.js"></script>
 	
 </body>
+
 </html>
