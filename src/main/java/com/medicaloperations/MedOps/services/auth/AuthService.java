@@ -1,15 +1,36 @@
 package com.medicaloperations.MedOps.services.auth;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.medicaloperations.MedOps.entities.Pacient;
+import com.medicaloperations.MedOps.repositories.PacientRepository;
 
 @Service
 public class AuthService {
 
-    public String authenticate(String email, String password) {
-        if ("teste@medical.com".equals(email) && "senha123".equals(password)) {
-             return "sucesso-token-jwt-aqui";
-        } else {
-             return null; 
-        }
-    }
+	@Autowired
+	private PacientRepository userRepository;
+
+
+	public String authenticate(String email, String rawPassword) {
+
+		Optional<Pacient> userOptional = userRepository.findByEmail(email);
+
+		if (userOptional.isEmpty()) {
+			return null;
+		}
+
+		Pacient user = userOptional.get();
+
+		if (user.getPassword().equals(rawPassword)) { 
+
+			return "seu-token-jwt-gerado-com-sucesso-para-o-id-" + user.getId();
+
+		} else {
+			return null;
+		}
+	}
 }
