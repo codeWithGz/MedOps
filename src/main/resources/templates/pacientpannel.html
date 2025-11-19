@@ -3,34 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/css/pacientpannelstyles.css">
+    <title>Menu Responsivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/pacientpannelstyles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar - Red background with greeting -->
-        <aside class="sidebar">
-            <p class="greeting">Olá, $User</p>
-        </aside>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <!-- Menu Button -->
+        <button id="menuButton" class="menu-button" aria-label="Toggle menu">
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+        </button>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Header -->
-            <h1 class="title">O que Deseja Acessar?</h1>
-
-            <!-- Cards Grid -->
-            <div class="cards-grid">
-                <!-- Card 1 -->
-                <div class="card"></div>
-                
-                <!-- Card 2 -->
-                <div class="card"></div>
-                
-                <!-- Card 3 -->
-                <div class="card card-3"></div>
-            </div>
-        </main>
+        <!-- User greeting -->
+        <p id="userGreeting" class="user-greeting">Olá, $User</p>
     </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Title -->
+        <p class="title">O que Deseja Acessar?</p>
+
+        <!-- Content Cards -->
+        <div class="cards-container">
+            <div class="card">
+				<span>Meus Agendamentos</span>
+			</div>
+            <div class="card">
+				<span>Meus Exames</span>
+			</div>
+            <div class="card">
+				<span>Telemedicina</span>
+			</div>
+        </div>
+    </div>
+
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <script src="/js/pacient-pannel.js"></script>
 </body>
 </html>
