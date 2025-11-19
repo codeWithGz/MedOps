@@ -12,22 +12,21 @@ import com.medicaloperations.MedOps.repositories.PacientRepository;
 public class AuthService {
 
 	@Autowired
-	private PacientRepository userRepository;
-
-
+	private PacientRepository pacientRepository;
+	
 	public String authenticate(String email, String rawPassword) {
 
-		Optional<Pacient> userOptional = userRepository.findByEmail(email);
+		Optional<Pacient> pacientOpt = pacientRepository.findByEmail(email);
 
-		if (userOptional.isEmpty()) {
+		if (pacientOpt.isEmpty()) {
 			return null;
 		}
 
-		Pacient user = userOptional.get();
+		Pacient user = pacientOpt.get();
 
 		if (user.getPassword().equals(rawPassword)) { 
 
-			return "seu-token-jwt-gerado-com-sucesso-para-o-id-" + user.getId();
+			return "token-jwt-gerado-com-sucesso-para-o-id-" + user.getId();
 
 		} else {
 			return null;

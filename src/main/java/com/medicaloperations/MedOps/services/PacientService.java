@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.medicaloperations.MedOps.entities.Doctor;
 import com.medicaloperations.MedOps.entities.Pacient;
 import com.medicaloperations.MedOps.repositories.PacientRepository;
 import com.medicaloperations.MedOps.services.exceptions.DatabaseException;
@@ -21,6 +21,9 @@ public class PacientService {
 
 	@Autowired
 	private PacientRepository repository;
+	
+	@Autowired
+    private PasswordEncoder passwordCrypt;
 
 	public List<Pacient> findAll() {
 		return repository.findAll();
@@ -32,6 +35,8 @@ public class PacientService {
 	}
 	
 	public Pacient insert(Pacient pacient) {
+		String encodedPassword = passwordCrypt.encode(pacient.getPassword());
+		pacient.setPassword(encodedPassword);
     	return repository.save(pacient);
     }
     
