@@ -3,6 +3,7 @@ package com.medicaloperations.MedOps.services.auth;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.medicaloperations.MedOps.entities.Pacient;
@@ -14,6 +15,9 @@ public class AuthService {
 	@Autowired
 	private PacientRepository pacientRepository;
 	
+	@Autowired
+    private PasswordEncoder passwordCrypt;
+	
 	public String authenticate(String email, String rawPassword) {
 
 		Optional<Pacient> pacientOpt = pacientRepository.findByEmail(email);
@@ -23,8 +27,10 @@ public class AuthService {
 		}
 
 		Pacient user = pacientOpt.get();
+		
+		
 
-		if (user.getPassword().equals(rawPassword)) { 
+		if (passwordCrypt.matches(rawPassword, user.getPassword())) { 
 
 			return "token-jwt-gerado-com-sucesso-para-o-id-" + user.getId();
 
