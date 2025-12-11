@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <button class="menu-btn" onclick="toggleMenu()">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -19,14 +18,11 @@
             </button>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
             <h1 class="title">Agendamento</h1>
 
             <div class="content-grid">
-                <!-- Left Column - Selection Fields -->
                 <div class="left-column">
-                    <!-- Unidade -->
                     <div class="field-group">
                         <h2 class="field-title">Selecione a Unidade</h2>
                         <div class="select-wrapper">
@@ -44,7 +40,6 @@
                         </div>
                     </div>
 
-                    <!-- Especialidade -->
                     <div class="field-group">
                         <h2 class="field-title">Selecione a Especialidade</h2>
                         <div class="select-wrapper">
@@ -64,7 +59,6 @@
                         </div>
                     </div>
 
-                    <!-- Médico -->
                     <div class="field-group">
                         <h2 class="field-title">Selecione o Médico</h2>
                         <div class="select-wrapper">
@@ -75,21 +69,25 @@
                                 </svg>
                             </button>
                             <div class="dropdown" id="medico-dropdown">
-                                <button class="dropdown-item" onclick="selectOption('medico', 'Dr. Code')">Dr. Code</button>
-                                <button class="dropdown-item" onclick="selectOption('medico', 'Dra. With')">Dra. With</button>
-                                <button class="dropdown-item" onclick="selectOption('medico', 'Dr. Gz')">Dr. Gz</button>
+                                <div class="dropdown-item" style="cursor: default; color: gray;">Selecione uma especialidade primeiro</div>
                             </div>
                         </div>
                     </div>
+					
+					<div class="field-group">
+                        <h2 class="field-title">Motivo da Consulta</h2>
+                        <div style="width: 100%; position: relative;">
+                            <input type="text" id="motivo-input" placeholder="Ex: Dor de cabeça, Rotina..." 
+                                   style="width: 100%; padding: 12px 16px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                        </div>
+                    </div>
+					
                 </div>
 
-                <!-- Right Column - Date & Time -->
                 <div class="right-column">
-                    <!-- Date Selection -->
                     <div class="field-group">
                         <h2 class="field-title">Selecione a Data</h2>
                         <div class="calendar">
-                            <!-- Month/Year Selector -->
                             <div class="calendar-header">
                                 <button class="nav-btn" onclick="changeMonth(-1)">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -109,7 +107,7 @@
                                         <option value="8">Set</option>
                                         <option value="9">Out</option>
                                         <option value="10">Nov</option>
-                                        <option value="11" selected >Dez</option>
+                                        <option value="11" selected>Dez</option>
                                     </select>
                                     <select class="year-select" id="year-select" onchange="updateCalendar()">
                                         <option value="2025" selected>2025</option>
@@ -123,7 +121,6 @@
                                 </button>
                             </div>
 
-                            <!-- Calendar Grid -->
                             <div class="calendar-grid">
                                 <div class="day-label">D</div>
                                 <div class="day-label">S</div>
@@ -137,13 +134,12 @@
                         </div>
                     </div>
 
-                    <!-- Time Selection -->
                     <div class="field-group">
                         <div class="time-picker">
                             <p class="time-label">Selecione o Horário</p>
                             <div class="time-inputs">
                                 <div class="time-field">
-                                    <input type="number" id="hour-input" class="hour-input" value="20" min="0" max="23">
+                                    <input type="number" id="hour-input" class="hour-input" value="14" min="0" max="23">
                                     <p class="time-field-label">Hora</p>
                                 </div>
                                 <div class="time-separator">:</div>
@@ -161,11 +157,10 @@
                 </div>
             </div>
 
-            <!-- Summary -->
             <div class="summary" id="summary" style="display: none;">
                 <h3 class="summary-title">Resumo do Agendamento</h3>
                 <div class="summary-content" id="summary-content"></div>
-                <button class="confirm-btn">Confirmar Agendamento</button>
+                <button class="confirm-btn" onclick="confirmarAgendamento()">Confirmar Agendamento</button>
             </div>
         </div>
     </div>

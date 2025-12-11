@@ -3,7 +3,7 @@ let selectedData = {
     unidade: '',
     especialidade: '',
     medico: '',     // Nome do médico (para exibir)
-    medicoId: null, // ID do médico (para enviar pro backend depois)
+    medicoId: null, // ID do médico (para enviar pro backend)
     date: null,
     month: new Date().getMonth(), // Mês atual
     year: new Date().getFullYear() // Ano atual
@@ -24,7 +24,6 @@ function toggleMenu() {
 
 // Toggle Dropdown
 function toggleDropdown(type) {
-    // Se for médico e não tiver especialidade selecionada, avisa o usuário
     if (type === 'medico' && !selectedData.especialidade) {
         alert('Por favor, selecione uma especialidade primeiro.');
         return;
@@ -42,55 +41,45 @@ function toggleDropdown(type) {
     dropdown.classList.toggle('active');
 }
 
-// Select Option (Função Principal Alterada)
+// Select Option
 function selectOption(type, value, extraData = null) {
     selectedData[type] = value;
     document.getElementById(type + '-selected').textContent = value;
     document.getElementById(type + '-dropdown').classList.remove('active');
 
-    // Lógica específica por tipo
+    // Lógica específica
     if (type === 'especialidade') {
-        // Se mudou a especialidade, reseta o médico selecionado
         resetMedicoSelection();
-        // Busca os médicos dessa especialidade
         fetchDoctorsBySpecialty(value);
     } else if (type === 'medico') {
-        // Se selecionou médico, guarda o ID também (se vier do backend)
         if (extraData) {
-            selectedData.medicoId = extraData;
+            selectedData.medicoId = extraData; // Salva o ID do médico
         }
     }
 
     updateSummary();
 }
 
-// Nova Função: Resetar seleção de médico
+// Resetar seleção de médico
 function resetMedicoSelection() {
     selectedData.medico = '';
     selectedData.medicoId = null;
     document.getElementById('medico-selected').textContent = 'Selecione';
     const medicoDropdown = document.getElementById('medico-dropdown');
-    medicoDropdown.innerHTML = ''; // Limpa a lista antiga
+    medicoDropdown.innerHTML = ''; 
 }
 
-// Nova Função: Buscar médicos na API
+// Buscar médicos na API
 async function fetchDoctorsBySpecialty(specialtyName) {
     const dropdown = document.getElementById('medico-dropdown');
-    
-    // Mostra feedback de carregamento
     dropdown.innerHTML = '<div class="dropdown-item" style="cursor: default">Carregando...</div>';
 
     try {
-        // Faz a chamada para o seu backend Java
         const response = await fetch(`${API_URL}/doctors/specialty/${specialtyName}`);
         
-        if (!response.ok) {
-            throw new Error('Erro na resposta da API');
-        }
+        if (!response.ok) throw new Error('Erro na resposta da API');
 
         const doctors = await response.json();
-        
-        // Limpa o "Carregando..."
         dropdown.innerHTML = '';
 
         if (doctors.length === 0) {
@@ -98,15 +87,12 @@ async function fetchDoctorsBySpecialty(specialtyName) {
             return;
         }
 
-        // Cria os botões para cada médico retornado do banco
         doctors.forEach(doc => {
             const btn = document.createElement('button');
             btn.className = 'dropdown-item';
-            btn.textContent = doc.name; // Usa o nome que vem do Java
-            
-            // Ao clicar, salva o Nome e o ID
+            btn.textContent = doc.name;
+            // Passa o ID como terceiro parâmetro
             btn.onclick = () => selectOption('medico', doc.name, doc.id);
-            
             dropdown.appendChild(btn);
         });
 
@@ -125,12 +111,11 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// --- Lógica do Calendário (Mantiquei igual, só resumido aqui) ---
+// --- Lógica do Calendário ---
 function updateCalendar() {
     const monthSelect = document.getElementById('month-select');
     const yearSelect = document.getElementById('year-select');
     
-    // Se os elementos não existirem ainda (ex: carregamento), retorna
     if(!monthSelect || !yearSelect) return;
 
     selectedData.month = parseInt(monthSelect.value);
@@ -208,21 +193,10 @@ function updateSummary() {
         
         let html = '';
         
-        if (selectedData.unidade) {
-            html += `<div class="summary-item"><strong>Unidade:</strong> ${selectedData.unidade}</div>`;
-        }
-        
-        if (selectedData.especialidade) {
-            html += `<div class="summary-item"><strong>Especialidade:</strong> ${selectedData.especialidade}</div>`;
-        }
-        
-        if (selectedData.medico) {
-            html += `<div class="summary-item"><strong>Médico:</strong> ${selectedData.medico}</div>`;
-        }
-        
-        if (selectedData.date) {
-            html += `<div class="summary-item"><strong>Data:</strong> ${selectedData.date} de ${monthNames[selectedData.month]} de ${selectedData.year}</div>`;
-        }
+        if (selectedData.unidade) html += `<div class="summary-item"><strong>Unidade:</strong> ${selectedData.unidade}</div>`;
+        if (selectedData.especialidade) html += `<div class="summary-item"><strong>Especialidade:</strong> ${selectedData.especialidade}</div>`;
+        if (selectedData.medico) html += `<div class="summary-item"><strong>Médico:</strong> ${selectedData.medico}</div>`;
+        if (selectedData.date) html += `<div class="summary-item"><strong>Data:</strong> ${selectedData.date} de ${monthNames[selectedData.month]} de ${selectedData.year}</div>`;
         
         const hour = document.getElementById('hour-input').value;
         const minute = document.getElementById('minute-input').value;
@@ -236,3 +210,81 @@ function updateSummary() {
 
 document.getElementById('hour-input').addEventListener('input', updateSummary);
 document.getElementById('minute-input').addEventListener('input', updateSummary);
+
+// =========================================================================
+//  NOVA FUNÇÃO: ENVIAR PARA O BACKEND (DINÂMICA)
+// =========================================================================
+
+async function confirmarAgendamento() {
+    // 1. RECUPERAR O ID DO USUÁRIO LOGADO
+    const usuarioLogadoId = localStorage.getItem('usuarioId');
+
+    // Se não tiver ID salvo, significa que não está logado
+    if (!usuarioLogadoId) {
+        alert("Você precisa estar logado para agendar!");
+        window.location.href = "/login.html"; // Redireciona para login
+        return;
+    }
+
+    // 2. Validação básica do formulário
+    if (!selectedData.medicoId) {
+        alert("Por favor, selecione um médico.");
+        return;
+    }
+    if (!selectedData.date) {
+        alert("Por favor, selecione uma data.");
+        return;
+    }
+
+    // 3. Pegar valores dos inputs de hora e motivo
+    const hour = document.getElementById('hour-input').value;
+    const minute = document.getElementById('minute-input').value;
+    
+    const motivoInput = document.getElementById('motivo-input');
+    const motiveValue = motivoInput ? motivoInput.value : "Consulta Agendada pelo Site"; 
+
+    // 4. Formatar a Data para ISO-8601 (yyyy-MM-ddTHH:mm:ssZ)
+    const pad = (n) => n < 10 ? '0' + n : n;
+    
+    const year = selectedData.year;
+    const month = pad(selectedData.month + 1); 
+    const day = pad(selectedData.date);
+    
+    const momentFormatted = `${year}-${month}-${day}T${hour}:${minute}:00Z`;
+
+    // 5. Montar o JSON (Payload) com o ID REAL
+    const appointmentData = {
+        moment: momentFormatted,
+        motive: motiveValue,
+        doctor: {
+            id: selectedData.medicoId
+        },
+        pacient: {
+            id: parseInt(usuarioLogadoId) // <--- AQUI ESTÁ A MUDANÇA (Converte string para número)
+        }
+    };
+
+    console.log("Enviando dados do usuário " + usuarioLogadoId, appointmentData);
+
+    // 6. Enviar fetch
+    try {
+        const response = await fetch(`${API_URL}/consultations`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(appointmentData)
+        });
+
+        if (response.ok) {
+            alert("Consulta agendada com sucesso!");
+            // window.location.href = '/meus-agendamentos.html'; 
+        } else {
+            const errorText = await response.text();
+            alert("Erro ao agendar: " + errorText);
+        }
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        alert("Erro de conexão com o servidor.");
+    }
+}

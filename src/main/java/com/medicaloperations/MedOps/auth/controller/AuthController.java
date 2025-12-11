@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medicaloperations.MedOps.auth.dto.LoginRequest;
+import com.medicaloperations.MedOps.entities.Pacient; 
+import com.medicaloperations.MedOps.repositories.PacientRepository; 
 import com.medicaloperations.MedOps.services.auth.AuthService;
 
 @RestController
@@ -18,6 +20,8 @@ public class AuthController {
     @Autowired
     private AuthService authService;
     
+    @Autowired
+    private PacientRepository pacientRepository; 
 
 
     @PostMapping("/login") 
@@ -33,20 +37,32 @@ public class AuthController {
         );
 
         if (token != null) {
-            return ResponseEntity.ok()
-                                .body(new LoginResponse(token, "Login bem-sucedido."));
+        	Pacient p = pacientRepository.findByEmail(loginRequest.getEmail()).orElse(null);
+            
+            if (p != null) {
+                return ResponseEntity.ok()
+                    .body(new LoginResponse(token, "Login bem-sucedido.", p.getId(), p.getName()));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao recuperar dados do usuário.");
+            }
+            
         } else {
             return new ResponseEntity<>("Credenciais inválidas.", HttpStatus.UNAUTHORIZED); 
         }
     }
 }
 
+
 class LoginResponse {
     public String token;
     public String message;
+    public Long id;      
+    public String name;  
     
-    public LoginResponse(String token, String message) {
+    public LoginResponse(String token, String message, Long id, String name) {
         this.token = token;
         this.message = message;
+        this.id = id;
+        this.name = name;
     }
 }
