@@ -4,11 +4,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.medicaloperations.MedOps.entities.MedicalConsultation;
+import com.medicaloperations.MedOps.entities.Pacient;
 import com.medicaloperations.MedOps.repositories.MedicalConsultationRepository;
+import com.medicaloperations.MedOps.services.exceptions.DatabaseException;
 import com.medicaloperations.MedOps.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class MedicalConsultationService {
@@ -24,6 +30,41 @@ public class MedicalConsultationService {
 		Optional<MedicalConsultation> obj = repository.findById(Id);
 		return obj.orElseThrow(()-> new ResourceNotFoundException(Id));
 	}
+	
+	public MedicalConsultation insert(MedicalConsultation consultation) {
+    	return repository.save(consultation);
+    }
+    
+    public void delete(Long id) {
+    	
+    	try {
+    		repository.deleteById(id);			
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch(DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
+    	
+    }
+    
+    public MedicalConsultation update(Long id, MedicalConsultation consultation) {
+    	
+    	try {
+    		MedicalConsultation updatedPacient = repository.getReferenceById(id);
+    		updateData(updatedPacient, consultation);
+    		return repository.save(updatedPacient);	
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
+    	
+    	
+    }
+
+	private void updateData(MedicalConsultation updatedPacient, MedicalConsultation consultation) {
+		updatedPacient.setDoctor(consultation.getDoctor());
+		updatedPacient.setMoment(consultation.getMoment());				
+	}
+	
 	
 	
 }

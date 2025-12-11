@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medicaloperations.MedOps.entities.enums.AccountStatus;
 
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,10 +31,10 @@ public class Pacient implements Serializable {
 	private Integer accountStatus;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "pacient")
+	@OneToMany(mappedBy = "pacient", fetch = FetchType.EAGER)
 	private List<MedicalConsultation> consultations = new ArrayList<>();
 	
-	private List<Long> consultationsIds = new ArrayList<>();
+
 	
 		
 	public Pacient() {
@@ -83,7 +84,10 @@ public class Pacient implements Serializable {
 	}
 
 	public AccountStatus getAccountStatus() {
-		return AccountStatus.valueOf(accountStatus);
+		if (accountStatus != null) {
+	        return AccountStatus.valueOf(accountStatus);
+	    }
+	    return null;
 	}
 
 	public void setAccountStatus(AccountStatus accountStatus) {
@@ -98,12 +102,9 @@ public class Pacient implements Serializable {
 	}
 	
 	public List<Long> getConsultationsIds() {
-		
-		for (MedicalConsultation m : consultations) {
-			consultationsIds.add(m.getId());
-		}
-		
-		return consultationsIds;
+		return consultations.stream()
+				.map(x -> x.getId())
+				.collect(Collectors.toList());
 	}
 
 	@Override

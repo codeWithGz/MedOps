@@ -81,7 +81,10 @@ public class Doctor implements Serializable {
 	}
 
 	public AccountStatus getAccountStatus() {
-		return AccountStatus.valueOf(accountStatus);
+		if (accountStatus != null) {
+	        return AccountStatus.valueOf(accountStatus);
+	    }
+	    return null;
 	}
 
 	public void setAccountStatus(AccountStatus accountStatus) {
@@ -91,7 +94,10 @@ public class Doctor implements Serializable {
 	}
 
 	public Specialty getSpecialty() {
-		return Specialty.valueOf(specialty);
+		if (specialty != null) {
+	        return Specialty.valueOf(specialty);
+	    }
+	    return null;
 	}
 
 	public void setSpecialty(Specialty specialty) {
