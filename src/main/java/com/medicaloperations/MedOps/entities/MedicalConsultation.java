@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,10 +29,12 @@ public class MedicalConsultation implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "doctorId")
+	@JsonIgnoreProperties({"password", "email", "accountStatus", "specialty", "consultations"})
 	private Doctor doctor;
 	
 	@ManyToOne
 	@JoinColumn(name = "pacientId")
+	@JsonIgnoreProperties({"password", "email", "accountStatus", "consultations", "consultationsIds"})
 	private Pacient pacient;
 	
 	private String motive;
