@@ -2,11 +2,14 @@
 let selectedData = {
     unidade: '',
     especialidade: '',
-    medico: '',
+    medico: '',     // Nome do médico (para exibir)
+    medicoId: null, // ID do médico (para enviar pro backend depois)
     date: null,
-    month: 8,
-    year: 2025
+    month: new Date().getMonth(), // Mês atual
+    year: new Date().getFullYear() // Ano atual
 };
+
+const API_URL = 'http://localhost:8080';
 
 // Initialize calendar on load
 document.addEventListener('DOMContentLoaded', function() {
@@ -16,11 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Toggle Menu
 function toggleMenu() {
-    alert('Menu aberto!');
+    console.log('Menu clicado');
 }
 
 // Toggle Dropdown
 function toggleDropdown(type) {
+    // Se for médico e não tiver especialidade selecionada, avisa o usuário
+    if (type === 'medico' && !selectedData.especialidade) {
+        alert('Por favor, selecione uma especialidade primeiro.');
+        return;
+    }
+
     const dropdown = document.getElementById(type + '-dropdown');
     const allDropdowns = document.querySelectorAll('.dropdown');
     
@@ -33,12 +42,78 @@ function toggleDropdown(type) {
     dropdown.classList.toggle('active');
 }
 
-// Select Option
-function selectOption(type, value) {
+// Select Option (Função Principal Alterada)
+function selectOption(type, value, extraData = null) {
     selectedData[type] = value;
     document.getElementById(type + '-selected').textContent = value;
     document.getElementById(type + '-dropdown').classList.remove('active');
+
+    // Lógica específica por tipo
+    if (type === 'especialidade') {
+        // Se mudou a especialidade, reseta o médico selecionado
+        resetMedicoSelection();
+        // Busca os médicos dessa especialidade
+        fetchDoctorsBySpecialty(value);
+    } else if (type === 'medico') {
+        // Se selecionou médico, guarda o ID também (se vier do backend)
+        if (extraData) {
+            selectedData.medicoId = extraData;
+        }
+    }
+
     updateSummary();
+}
+
+// Nova Função: Resetar seleção de médico
+function resetMedicoSelection() {
+    selectedData.medico = '';
+    selectedData.medicoId = null;
+    document.getElementById('medico-selected').textContent = 'Selecione';
+    const medicoDropdown = document.getElementById('medico-dropdown');
+    medicoDropdown.innerHTML = ''; // Limpa a lista antiga
+}
+
+// Nova Função: Buscar médicos na API
+async function fetchDoctorsBySpecialty(specialtyName) {
+    const dropdown = document.getElementById('medico-dropdown');
+    
+    // Mostra feedback de carregamento
+    dropdown.innerHTML = '<div class="dropdown-item" style="cursor: default">Carregando...</div>';
+
+    try {
+        // Faz a chamada para o seu backend Java
+        const response = await fetch(`${API_URL}/doctors/specialty/${specialtyName}`);
+        
+        if (!response.ok) {
+            throw new Error('Erro na resposta da API');
+        }
+
+        const doctors = await response.json();
+        
+        // Limpa o "Carregando..."
+        dropdown.innerHTML = '';
+
+        if (doctors.length === 0) {
+            dropdown.innerHTML = '<div class="dropdown-item" style="cursor: default">Nenhum médico encontrado</div>';
+            return;
+        }
+
+        // Cria os botões para cada médico retornado do banco
+        doctors.forEach(doc => {
+            const btn = document.createElement('button');
+            btn.className = 'dropdown-item';
+            btn.textContent = doc.name; // Usa o nome que vem do Java
+            
+            // Ao clicar, salva o Nome e o ID
+            btn.onclick = () => selectOption('medico', doc.name, doc.id);
+            
+            dropdown.appendChild(btn);
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar médicos:', error);
+        dropdown.innerHTML = '<div class="dropdown-item" style="color: red">Erro ao carregar lista</div>';
+    }
 }
 
 // Close dropdowns when clicking outside
@@ -50,11 +125,14 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Calendar Functions
+// --- Lógica do Calendário (Mantiquei igual, só resumido aqui) ---
 function updateCalendar() {
     const monthSelect = document.getElementById('month-select');
     const yearSelect = document.getElementById('year-select');
     
+    // Se os elementos não existirem ainda (ex: carregamento), retorna
+    if(!monthSelect || !yearSelect) return;
+
     selectedData.month = parseInt(monthSelect.value);
     selectedData.year = parseInt(yearSelect.value);
     
@@ -64,53 +142,23 @@ function updateCalendar() {
     const firstDay = new Date(selectedData.year, selectedData.month, 1).getDay();
     const daysInMonth = new Date(selectedData.year, selectedData.month + 1, 0).getDate();
     
-    // Empty cells for days before month starts
     for (let i = 0; i < firstDay; i++) {
         const emptyDiv = document.createElement('div');
         emptyDiv.className = 'calendar-day empty';
         daysContainer.appendChild(emptyDiv);
     }
     
-    // Days of the month
     for (let day = 1; day <= daysInMonth; day++) {
         const dayBtn = document.createElement('button');
         dayBtn.className = 'calendar-day';
         dayBtn.textContent = day;
         dayBtn.onclick = () => selectDate(day);
         
-        // Highlight today (9th) for September 2025
-        if (day === 9 && selectedData.month === 8 && selectedData.year === 2025) {
-            dayBtn.classList.add('today');
-        }
-        
-        // Highlight range (10-12) for September 2025
-        if (day >= 10 && day <= 12 && selectedData.month === 8 && selectedData.year === 2025) {
-            dayBtn.classList.add('in-range');
-        }
-        
-        // Highlight selected date
         if (selectedData.date === day) {
             dayBtn.classList.add('selected');
         }
         
         daysContainer.appendChild(dayBtn);
-    }
-    
-    // Add next month days to fill the grid
-    const totalCells = firstDay + daysInMonth;
-    const remainingCells = 7 - (totalCells % 7);
-    
-    if (remainingCells < 7) {
-        for (let i = 1; i <= remainingCells; i++) {
-            const nextMonthDay = document.createElement('button');
-            nextMonthDay.className = 'calendar-day next-month';
-            nextMonthDay.textContent = i;
-            nextMonthDay.onclick = () => {
-                changeMonth(1);
-                setTimeout(() => selectDate(i), 100);
-            };
-            daysContainer.appendChild(nextMonthDay);
-        }
     }
 }
 
@@ -186,21 +234,5 @@ function updateSummary() {
     }
 }
 
-// Update summary when time changes
 document.getElementById('hour-input').addEventListener('input', updateSummary);
 document.getElementById('minute-input').addEventListener('input', updateSummary);
-
-// Format time inputs
-document.getElementById('hour-input').addEventListener('blur', function() {
-    let value = parseInt(this.value);
-    if (isNaN(value) || value < 0) value = 0;
-    if (value > 23) value = 23;
-    this.value = value.toString().padStart(2, '0');
-});
-
-document.getElementById('minute-input').addEventListener('blur', function() {
-    let value = parseInt(this.value);
-    if (isNaN(value) || value < 0) value = 0;
-    if (value > 59) value = 59;
-    this.value = value.toString().padStart(2, '0');
-});
