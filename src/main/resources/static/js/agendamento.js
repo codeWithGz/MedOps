@@ -2,14 +2,14 @@
 let selectedData = {
     unidade: '',
     especialidade: '',
-    medico: '',     // Nome do médico (para exibir)
-    medicoId: null, // ID do médico (para enviar pro backend)
+    medico: '',     
+    medicoId: null, 
     date: null,
-    month: new Date().getMonth(), // Mês atual
-    year: new Date().getFullYear() // Ano atual
+    month: new Date().getMonth(), 
+    year: new Date().getFullYear() 
 };
 
-const API_URL = 'http://localhost:8080';
+const API_URL = 'https://medops-p8i0.onrender.com/';
 
 // Initialize calendar on load
 document.addEventListener('DOMContentLoaded', function() {
