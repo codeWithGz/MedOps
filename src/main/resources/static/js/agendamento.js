@@ -9,7 +9,7 @@ let selectedData = {
     year: new Date().getFullYear() 
 };
 
-const API_URL = 'https://medops-p8i0.onrender.com/';
+const API_URL = 'https://medops-p8i0.onrender.com';
 
 // Initialize calendar on load
 document.addEventListener('DOMContentLoaded', function() {
