@@ -35,12 +35,11 @@ public class MedicalConsultation implements Serializable{
 	private Pacient pacient;
 	
 	private String motive;
-	private String diagnosis;
 	
 	public MedicalConsultation() {}
 
 
-	public MedicalConsultation(Long id, Instant moment, Doctor doctor, Pacient pacient, String motive, String diagnosis) {
+	public MedicalConsultation(Long id, Instant moment, Doctor doctor, Pacient pacient, String motive) {
 		super();
 		this.id = id;
 		this.moment = moment;
@@ -48,7 +47,6 @@ public class MedicalConsultation implements Serializable{
 		this.pacient = pacient;
 		
 		this.motive = motive;
-		this.diagnosis = diagnosis;
 	}
 
 
@@ -101,15 +99,6 @@ public class MedicalConsultation implements Serializable{
 		this.motive = motive;
 	}
 
-
-	public String getDiagnosis() {
-		return diagnosis;
-	}
-
-
-	public void setDiagnosis(String diagnosis) {
-		this.diagnosis = diagnosis;
-	}
 
 
 	@Override

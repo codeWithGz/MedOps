@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento</title>
+    <link rel="stylesheet" href="/css/agendamentostyle.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <button class="menu-btn" onclick="toggleMenu()">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 class="title">Agendamento</h1>
+
+            <div class="content-grid">
+                <!-- Left Column - Selection Fields -->
+                <div class="left-column">
+                    <!-- Unidade -->
+                    <div class="field-group">
+                        <h2 class="field-title">Selecione a Unidade</h2>
+                        <div class="select-wrapper">
+                            <button class="select-btn" onclick="toggleDropdown('unidade')">
+                                <span id="unidade-selected">Selecione</span>
+                                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                                    <path d="M4 6L8 10L12 6" stroke="#1E1E1E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown" id="unidade-dropdown">
+                                <button class="dropdown-item" onclick="selectOption('unidade', 'Unidade Central')">Unidade Central</button>
+                                <button class="dropdown-item" onclick="selectOption('unidade', 'Unidade Norte')">Unidade Norte</button>
+                                <button class="dropdown-item" onclick="selectOption('unidade', 'Unidade Sul')">Unidade Sul</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Especialidade -->
+                    <div class="field-group">
+                        <h2 class="field-title">Selecione a Especialidade</h2>
+                        <div class="select-wrapper">
+                            <button class="select-btn" onclick="toggleDropdown('especialidade')">
+                                <span id="especialidade-selected">Selecione</span>
+                                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                                    <path d="M4 6L8 10L12 6" stroke="#1E1E1E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown" id="especialidade-dropdown">
+                                <button class="dropdown-item" onclick="selectOption('especialidade', 'CLINICO')">Clinico</button>
+                                <button class="dropdown-item" onclick="selectOption('especialidade', 'ENFERMEIRO')">Enfermeiro</button>
+                                <button class="dropdown-item" onclick="selectOption('especialidade', 'AUXENFERMAGEM')">Auxiliar de Enfermagem</button>
+                                <button class="dropdown-item" onclick="selectOption('especialidade', 'DENTISTA')">Dentista</button>
+                                <button class="dropdown-item" onclick="selectOption('especialidade', 'FARMACEUTICO')">Farmaceutico</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Médico -->
+                    <div class="field-group">
+                        <h2 class="field-title">Selecione o Médico</h2>
+                        <div class="select-wrapper">
+                            <button class="select-btn" onclick="toggleDropdown('medico')">
+                                <span id="medico-selected">Selecione</span>
+                                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                                    <path d="M4 6L8 10L12 6" stroke="#1E1E1E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="dropdown" id="medico-dropdown">
+                                <button class="dropdown-item" onclick="selectOption('medico', 'Dr. Code')">Dr. Code</button>
+                                <button class="dropdown-item" onclick="selectOption('medico', 'Dra. With')">Dra. With</button>
+                                <button class="dropdown-item" onclick="selectOption('medico', 'Dr. Gz')">Dr. Gz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Date & Time -->
+                <div class="right-column">
+                    <!-- Date Selection -->
+                    <div class="field-group">
+                        <h2 class="field-title">Selecione a Data</h2>
+                        <div class="calendar">
+                            <!-- Month/Year Selector -->
+                            <div class="calendar-header">
+                                <button class="nav-btn" onclick="changeMonth(-1)">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M12.5 15L7.5 10L12.5 5" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <div class="month-year-selectors">
+                                    <select class="month-select" id="month-select" onchange="updateCalendar()">
+                                        <option value="0">Jan</option>
+                                        <option value="1">Fev</option>
+                                        <option value="2">Mar</option>
+                                        <option value="3">Abr</option>
+                                        <option value="4">Mai</option>
+                                        <option value="5">Jun</option>
+                                        <option value="6">Jul</option>
+                                        <option value="7">Ago</option>
+                                        <option value="8">Set</option>
+                                        <option value="9">Out</option>
+                                        <option value="10">Nov</option>
+                                        <option value="11" selected >Dez</option>
+                                    </select>
+                                    <select class="year-select" id="year-select" onchange="updateCalendar()">
+                                        <option value="2025" selected>2025</option>
+                                        <option value="2026">2026</option>
+                                    </select>
+                                </div>
+                                <button class="nav-btn" onclick="changeMonth(1)">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                        <path d="M7.5 15L12.5 10L7.5 5" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Calendar Grid -->
+                            <div class="calendar-grid">
+                                <div class="day-label">D</div>
+                                <div class="day-label">S</div>
+                                <div class="day-label">T</div>
+                                <div class="day-label">Q</div>
+                                <div class="day-label">Q</div>
+                                <div class="day-label">S</div>
+                                <div class="day-label">S</div>
+                                <div id="calendar-days"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Selection -->
+                    <div class="field-group">
+                        <div class="time-picker">
+                            <p class="time-label">Selecione o Horário</p>
+                            <div class="time-inputs">
+                                <div class="time-field">
+                                    <input type="number" id="hour-input" class="hour-input" value="20" min="0" max="23">
+                                    <p class="time-field-label">Hora</p>
+                                </div>
+                                <div class="time-separator">:</div>
+                                <div class="time-field">
+                                    <input type="number" id="minute-input" class="minute-input" value="00" min="0" max="59">
+                                    <p class="time-field-label">Minuto</p>
+                                </div>
+                            </div>
+                            <div class="time-actions">
+                                <button class="time-btn">Cancel</button>
+                                <button class="time-btn">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary" id="summary" style="display: none;">
+                <h3 class="summary-title">Resumo do Agendamento</h3>
+                <div class="summary-content" id="summary-content"></div>
+                <button class="confirm-btn">Confirmar Agendamento</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/agendamento.js"></script>
+</body>
+</html>

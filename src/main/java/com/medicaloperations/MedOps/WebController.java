@@ -16,6 +16,11 @@ public class WebController {
         return "pacientpannel"; 
     }
     
+    @GetMapping("/agendamento")
+    public String agendamentoConsulta() {
+        return "agendamento"; 
+    }
+    
     @GetMapping("/createaccount")
     public String createAccount() {
         return "createaccount"; 
