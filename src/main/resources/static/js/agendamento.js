@@ -277,7 +277,7 @@ async function confirmarAgendamento() {
            
         } else {
             const errorText = await response.text();
-            alert("Erro ao agendar: " + errorText);
+            alert( selectedData.medico + ": " + errorText);
         }
     } catch (error) {
         console.error("Erro na requisição:", error);

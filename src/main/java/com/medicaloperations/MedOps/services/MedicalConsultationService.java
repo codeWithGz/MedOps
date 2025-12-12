@@ -1,5 +1,7 @@
 package com.medicaloperations.MedOps.services;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +33,22 @@ public class MedicalConsultationService {
 	}
 	
 	public MedicalConsultation insert(MedicalConsultation consultation) {
+		long durationMinutes = 30;
+		Instant startWindow = consultation.getMoment().minus(durationMinutes, ChronoUnit.MINUTES);
+        Instant endWindow = consultation.getMoment().plus(durationMinutes, ChronoUnit.MINUTES);
+
 		
-		boolean existInMoment = repository.existsByDoctorIdAndMoment(consultation.getDoctor().getId(), consultation.getMoment());
-		if (existInMoment) {
-			throw new IllegalArgumentException("Ops! Parece que alguém já agendou esse horario, tente um horário diferente." );
-		}
 		
+        boolean hasConflict = repository.existsInTimeWindow(
+        		consultation.getDoctor().getId(), 
+                startWindow, 
+                endWindow
+            );
+		
+        if (hasConflict) {
+            throw new IllegalArgumentException("Ops! Parece que ja existe uma consulta nesse horário, tente trocar o horario ou data.");
+        }
+        
     	return repository.save(consultation);
     }
 	
