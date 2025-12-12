@@ -9,7 +9,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.medicaloperations.MedOps.entities.MedicalConsultation;
-import com.medicaloperations.MedOps.entities.Pacient;
 import com.medicaloperations.MedOps.repositories.MedicalConsultationRepository;
 import com.medicaloperations.MedOps.services.exceptions.DatabaseException;
 import com.medicaloperations.MedOps.services.exceptions.ResourceNotFoundException;
@@ -32,8 +31,16 @@ public class MedicalConsultationService {
 	}
 	
 	public MedicalConsultation insert(MedicalConsultation consultation) {
+		
+		boolean existInMoment = repository.existsByDoctorIdAndMoment(consultation.getDoctor().getId(), consultation.getMoment());
+		if (existInMoment) {
+			throw new IllegalArgumentException("Ops! Parece que alguém já agendou esse horario, tente um horário diferente." );
+		}
+		
     	return repository.save(consultation);
     }
+	
+
     
     public void delete(Long id) {
     	

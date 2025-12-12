@@ -9,7 +9,8 @@ let selectedData = {
     year: new Date().getFullYear() 
 };
 
-const API_URL = 'https://medops-p8i0.onrender.com';
+//const API_URL = 'https://medops-p8i0.onrender.com';
+const API_URL = 'http://localhost:8080';
 
 // Initialize calendar on load
 document.addEventListener('DOMContentLoaded', function() {
@@ -53,7 +54,7 @@ function selectOption(type, value, extraData = null) {
         fetchDoctorsBySpecialty(value);
     } else if (type === 'medico') {
         if (extraData) {
-            selectedData.medicoId = extraData; // Salva o ID do médico
+            selectedData.medicoId = extraData; 
         }
     }
 
@@ -211,22 +212,18 @@ function updateSummary() {
 document.getElementById('hour-input').addEventListener('input', updateSummary);
 document.getElementById('minute-input').addEventListener('input', updateSummary);
 
-// =========================================================================
-//  NOVA FUNÇÃO: ENVIAR PARA O BACKEND (DINÂMICA)
-// =========================================================================
+
 
 async function confirmarAgendamento() {
-    // 1. RECUPERAR O ID DO USUÁRIO LOGADO
+
     const usuarioLogadoId = localStorage.getItem('usuarioId');
 
-    // Se não tiver ID salvo, significa que não está logado
     if (!usuarioLogadoId) {
         alert("Você precisa estar logado para agendar!");
-        window.location.href = "/login.html"; // Redireciona para login
+        window.location.href = "/login.html"; 
         return;
     }
 
-    // 2. Validação básica do formulário
     if (!selectedData.medicoId) {
         alert("Por favor, selecione um médico.");
         return;
@@ -236,14 +233,13 @@ async function confirmarAgendamento() {
         return;
     }
 
-    // 3. Pegar valores dos inputs de hora e motivo
     const hour = document.getElementById('hour-input').value;
     const minute = document.getElementById('minute-input').value;
     
     const motivoInput = document.getElementById('motivo-input');
     const motiveValue = motivoInput ? motivoInput.value : "Consulta Agendada pelo Site"; 
 
-    // 4. Formatar a Data para ISO-8601 (yyyy-MM-ddTHH:mm:ssZ)
+
     const pad = (n) => n < 10 ? '0' + n : n;
     
     const year = selectedData.year;
@@ -252,7 +248,7 @@ async function confirmarAgendamento() {
     
     const momentFormatted = `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 
-    // 5. Montar o JSON (Payload) com o ID REAL
+
     const appointmentData = {
         moment: momentFormatted,
         motive: motiveValue,
@@ -260,13 +256,13 @@ async function confirmarAgendamento() {
             id: selectedData.medicoId
         },
         pacient: {
-            id: parseInt(usuarioLogadoId) // <--- AQUI ESTÁ A MUDANÇA (Converte string para número)
+            id: parseInt(usuarioLogadoId) 
         }
     };
 
     console.log("Enviando dados do usuário " + usuarioLogadoId, appointmentData);
 
-    // 6. Enviar fetch
+
     try {
         const response = await fetch(`${API_URL}/consultations`, {
             method: 'POST',
@@ -278,7 +274,7 @@ async function confirmarAgendamento() {
 
         if (response.ok) {
             alert("Consulta agendada com sucesso!");
-            // window.location.href = '/meus-agendamentos.html'; 
+           
         } else {
             const errorText = await response.text();
             alert("Erro ao agendar: " + errorText);
