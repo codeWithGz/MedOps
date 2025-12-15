@@ -209,8 +209,56 @@ function updateSummary() {
     }
 }
 
-document.getElementById('hour-input').addEventListener('input', updateSummary);
-document.getElementById('minute-input').addEventListener('input', updateSummary);
+// --- Lógica de Controle de Horário (08:00 - 17:30) ---
+const hourInput = document.getElementById('hour-input');
+const minuteInput = document.getElementById('minute-input');
+
+const padTime = (val) => val.toString().padStart(2, '0');
+
+function handleTimeChange() {
+    let h = parseInt(hourInput.value);
+    let m = parseInt(minuteInput.value);
+
+    // 1. Lógica de Rollover (virada de hora pelos minutos)
+    if (m >= 60) {
+        m = 0;
+        h++;
+    } else if (m < 0) {
+        m = 30;
+        h--;
+    } else if (m !== 0 && m !== 30) {
+        // Arredonda valores digitados manualmente (ex: 15 vira 30)
+        m = m > 15 ? 30 : 0;
+    }
+
+    // 2. Validação de Limites (08:00 até 17:30)
+
+    // Limite Mínimo: Se for antes das 08:00, força 08:00
+    if (h < 8) {
+        h = 8;
+        m = 0;
+    }
+
+    // Limite Máximo: Se passar de 17:30, força 17:30
+    // (Se hora > 17 OU se for 17h e minutos > 30)
+    if (h > 17 || (h === 17 && m > 30)) {
+        h = 17;
+        m = 30;
+    }
+
+    // 3. Aplica os valores corrigidos
+    hourInput.value = padTime(h);
+    minuteInput.value = padTime(m);
+
+    updateSummary();
+}
+
+// Listeners
+minuteInput.addEventListener('change', handleTimeChange);
+hourInput.addEventListener('change', handleTimeChange);
+
+// Inicializa correto ao carregar
+handleTimeChange();
 
 
 
