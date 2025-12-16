@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Agendamentos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/scheduling.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="menu-icon">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <h1 class="page-title">Agendamentos</h1>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-new" id="btnNovoAgendamento">
+                    + Novo Agendamento
+                </button>
+                <div class="search-container">
+                    <button class="btn btn-search">
+                        <svg class="search-icon" fill="none" viewBox="0 0 35 35">
+                            <g>
+                                <path d="M15.5208 30.0417C23.5406 30.0417 30.0417 23.5406 30.0417 15.5208C30.0417 7.50106 23.5406 1 15.5208 1C7.50106 1 1 7.50106 1 15.5208C1 23.5406 7.50106 30.0417 15.5208 30.0417Z" stroke="black" stroke-linejoin="round" stroke-width="2" />
+                                <path d="M20.7058 9.83465C20.0718 9.19936 19.3186 8.69554 18.4894 8.3521C17.6602 8.00866 16.7713 7.83237 15.8738 7.83333C14.9763 7.83237 14.0874 8.00866 13.2582 8.3521C12.429 8.69554 11.6757 9.19936 11.0417 9.83465M26.3134 25.9605L33.561 33.2081" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                            </g>
+                        </svg>
+                        Pesquisar
+                    </button>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Digite para pesquisar...">
+                </div>
+            </div>
+
+            <!-- Appointments List -->
+            <div class="appointments-container">
+                <div id="appointmentsList" class="appointments-list">
+                    <!-- Appointment items will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/scheduling.js"></script>
+</body>
+</html>

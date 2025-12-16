@@ -16,6 +16,11 @@ public class WebController {
         return "pacientpannel"; 
     }
     
+    @GetMapping("/myschedule")
+    public String schedule() {
+        return "scheduling"; 
+    }
+    
     @GetMapping("/agendamento")
     public String agendamentoConsulta() {
         return "agendamento"; 
