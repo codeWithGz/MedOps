@@ -1,23 +1,15 @@
-// Configuração da API
-
 const API_URL = 'https://medops-p8i0.onrender.com/consultations'; 
 //const API_URL = 'http://localhost:8080/consultations'; 
-
-// Estado da aplicação
 let appointments = [];
 
-// Elementos do DOM
 const btnNovoAgendamento = document.getElementById('btnNovoAgendamento');
 const appointmentsList = document.getElementById('appointmentsList');
 const searchInput = document.getElementById('searchInput');
 const btnSearch = document.querySelector('.btn-search');
-
-// Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     fetchAppointments();
 });
 
-// --- FUNÇÕES DE API ---
 
 async function fetchAppointments() {
     try {
@@ -31,7 +23,6 @@ async function fetchAppointments() {
 
         const data = await response.json();
         
-        // A API retorna o JSON que você mostrou. Salvamos no estado global.
         appointments = data;
         renderAppointments(appointments);
 
@@ -62,29 +53,22 @@ async function deleteAppointment(id) {
     }
 }
 
-// --- FUNÇÕES DE DATA E HORA ---
-
 function formatDate(isoString) {
     if (!isoString) return '--/--/----';
     const date = new Date(isoString);
     
-    // O parâmetro timeZone: 'UTC' força o navegador a não converter para o horário local
     return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 }
 
 function formatTime(isoString) {
     if (!isoString) return '--:--';
     const date = new Date(isoString);
-    
-    // O parâmetro timeZone: 'UTC' faz mostrar 10:00 se estiver escrito 10:00Z
     return date.toLocaleTimeString('pt-BR', { 
         hour: '2-digit', 
         minute: '2-digit',
         timeZone: 'UTC' 
     });
 }
-
-// --- RENDERIZAÇÃO ---
 
 function renderAppointments(appointmentsToRender) {
     if (!appointmentsToRender || appointmentsToRender.length === 0) {
@@ -97,11 +81,6 @@ function renderAppointments(appointmentsToRender) {
     appointmentsToRender.forEach((appointment) => {
         const appointmentItem = document.createElement('div');
         appointmentItem.className = 'appointment-item';
-        
-        // AQUI ESTÃO AS MUDANÇAS PRINCIPAIS DE MAPEAMENTO:
-        // appointment.moment -> usamos para data e hora
-        // appointment.doctor.name -> nome do médico
-        // appointment.motive -> motivo
         
         appointmentItem.innerHTML = `
             <div class="appointment-left">
@@ -118,7 +97,6 @@ function renderAppointments(appointmentsToRender) {
     });
 }
 
-// --- EVENTOS ---
 
 if (btnNovoAgendamento) {
     btnNovoAgendamento.addEventListener('click', () => {
@@ -135,7 +113,6 @@ if (btnSearch) {
     });
 }
 
-// Busca atualizada para a nova estrutura do objeto
 if (searchInput) {
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
@@ -146,7 +123,6 @@ if (searchInput) {
         }
 
         const filteredAppointments = appointments.filter(appointment => {
-            // Proteção com '?' (Optional Chaining) caso venha nulo
             const doctorName = appointment.doctor?.name?.toLowerCase() || '';
             const motive = appointment.motive?.toLowerCase() || '';
             const dateStr = formatDate(appointment.moment);
@@ -160,7 +136,6 @@ if (searchInput) {
     });
 }
 
-// Menu Mobile
 const menuIcon = document.querySelector('.menu-icon');
 if (menuIcon) {
     menuIcon.addEventListener('click', () => {

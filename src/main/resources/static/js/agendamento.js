@@ -1,4 +1,3 @@
-// State
 let selectedData = {
     unidade: '',
     especialidade: '',
@@ -12,18 +11,15 @@ let selectedData = {
 const API_URL = 'https://medops-p8i0.onrender.com';
 //const API_URL = 'http://localhost:8080';
 
-// Initialize calendar on load
 document.addEventListener('DOMContentLoaded', function() {
     updateCalendar();
     updateSummary();
 });
 
-// Toggle Menu
 function toggleMenu() {
     console.log('Menu clicado');
 }
 
-// Toggle Dropdown
 function toggleDropdown(type) {
     if (type === 'medico' && !selectedData.especialidade) {
         alert('Por favor, selecione uma especialidade primeiro.');
@@ -42,13 +38,11 @@ function toggleDropdown(type) {
     dropdown.classList.toggle('active');
 }
 
-// Select Option
 function selectOption(type, value, extraData = null) {
     selectedData[type] = value;
     document.getElementById(type + '-selected').textContent = value;
     document.getElementById(type + '-dropdown').classList.remove('active');
 
-    // Lógica específica
     if (type === 'especialidade') {
         resetMedicoSelection();
         fetchDoctorsBySpecialty(value);
@@ -61,7 +55,6 @@ function selectOption(type, value, extraData = null) {
     updateSummary();
 }
 
-// Resetar seleção de médico
 function resetMedicoSelection() {
     selectedData.medico = '';
     selectedData.medicoId = null;
@@ -70,7 +63,6 @@ function resetMedicoSelection() {
     medicoDropdown.innerHTML = ''; 
 }
 
-// Buscar médicos na API
 async function fetchDoctorsBySpecialty(specialtyName) {
     const dropdown = document.getElementById('medico-dropdown');
     dropdown.innerHTML = '<div class="dropdown-item" style="cursor: default">Carregando...</div>';
@@ -92,7 +84,6 @@ async function fetchDoctorsBySpecialty(specialtyName) {
             const btn = document.createElement('button');
             btn.className = 'dropdown-item';
             btn.textContent = doc.name;
-            // Passa o ID como terceiro parâmetro
             btn.onclick = () => selectOption('medico', doc.name, doc.id);
             dropdown.appendChild(btn);
         });
@@ -103,7 +94,6 @@ async function fetchDoctorsBySpecialty(specialtyName) {
     }
 }
 
-// Close dropdowns when clicking outside
 document.addEventListener('click', function(event) {
     if (!event.target.closest('.select-wrapper')) {
         document.querySelectorAll('.dropdown').forEach(d => {
@@ -112,7 +102,6 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// --- Lógica do Calendário ---
 function updateCalendar() {
     const monthSelect = document.getElementById('month-select');
     const yearSelect = document.getElementById('year-select');
@@ -178,7 +167,6 @@ function changeMonth(direction) {
     updateCalendar();
 }
 
-// Update Summary
 function updateSummary() {
     const summary = document.getElementById('summary');
     const summaryContent = document.getElementById('summary-content');
@@ -209,7 +197,6 @@ function updateSummary() {
     }
 }
 
-// --- Lógica de Controle de Horário (08:00 - 17:30) ---
 const hourInput = document.getElementById('hour-input');
 const minuteInput = document.getElementById('minute-input');
 
@@ -219,7 +206,6 @@ function handleTimeChange() {
     let h = parseInt(hourInput.value);
     let m = parseInt(minuteInput.value);
 
-    // 1. Lógica de Rollover (virada de hora pelos minutos)
     if (m >= 60) {
         m = 0;
         h++;
@@ -227,40 +213,26 @@ function handleTimeChange() {
         m = 30;
         h--;
     } else if (m !== 0 && m !== 30) {
-        // Arredonda valores digitados manualmente (ex: 15 vira 30)
         m = m > 15 ? 30 : 0;
     }
-
-    // 2. Validação de Limites (08:00 até 17:30)
-
-    // Limite Mínimo: Se for antes das 08:00, força 08:00
     if (h < 8) {
         h = 8;
         m = 0;
     }
-
-    // Limite Máximo: Se passar de 17:30, força 17:30
-    // (Se hora > 17 OU se for 17h e minutos > 30)
     if (h > 17 || (h === 17 && m > 30)) {
         h = 17;
         m = 30;
     }
 
-    // 3. Aplica os valores corrigidos
     hourInput.value = padTime(h);
     minuteInput.value = padTime(m);
 
     updateSummary();
 }
-
-// Listeners
 minuteInput.addEventListener('change', handleTimeChange);
 hourInput.addEventListener('change', handleTimeChange);
 
-// Inicializa correto ao carregar
 handleTimeChange();
-
-
 
 async function confirmarAgendamento() {
 
