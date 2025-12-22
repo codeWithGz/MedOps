@@ -1,5 +1,5 @@
-//const API_URL = 'https://medops-p8i0.onrender.com'; 
-const API_URL = 'http://localhost:8080/exams'; 
+const API_URL = 'https://medops-p8i0.onrender.com/exams'; 
+//const API_URL = 'http://localhost:8080/exams'; 
 
 let exams = [];
 
@@ -67,11 +67,38 @@ function renderExams(examsToRender) {
 	    });
 }
 
+async function deleteExam(id) {
+    if (confirm('Deseja realmente excluir este agendamento?')) {
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                appointments = appointments.filter(appointment => appointment.id !== id);
+                renderAppointments(appointments);
+                alert('Exame excluído com sucesso!');
+            } else {
+                alert('Erro ao excluir no servidor.');
+            }
+        } catch (error) {
+            console.error('Erro ao excluir:', error);
+            alert('Erro de conexão ao tentar excluir.');
+        }
+    }
+}
+
+
 function formatDate(isoString) {
     if (!isoString) return '--/--/----';
     return new Date(isoString).toLocaleDateString('pt-BR');
 }
 
+if (btnNovoExame) {
+    btnNovoExame.addEventListener('click', () => {
+        window.location.href = '/pacientpannel'; // ainda tem que criar a pagina para marcar um novo exame
+    });
+}
 // Lógica de pesquisa simplificada para o PO
 searchInput.addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();

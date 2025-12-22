@@ -2,7 +2,7 @@ package com.medicaloperations.MedOps.entities.enums;
 
 public enum ExamStatus {
 
-	AGENDADO(1), PROCESSANDO(2), DISPONIVEL(3), CANCELADO(44);
+	AGENDADO(1), PROCESSANDO(2), DISPONIVEL(3), CANCELADO(4);
 
 	private int code;
 
