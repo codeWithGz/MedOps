@@ -44,7 +44,7 @@ document.getElementById('createAccountForm').addEventListener('submit', function
         }
     })
     .then(pacientObj => {
-        statusElement.textContent = `SUCESSO! Conta de ${pacientObj.name} criada com ID ${pacientObj.id}.`;
+        statusElement.textContent = `SUCESSO! Conta de ${pacientObj.name} criada.`;
         statusElement.style.color = '#5cb85c'; 
         form.reset(); 
     })
