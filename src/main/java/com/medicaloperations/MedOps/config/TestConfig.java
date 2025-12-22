@@ -49,8 +49,8 @@ public class TestConfig implements CommandLineRunner {
 								"/uploads/laudos/exame001.pdf", ExamStatus.DISPONIVEL, professionalRepository.getById(1L), null, "Nenhum preparo necessario", null);
 
 			
-			Exam e2 = new Exam("Hemograma", "PROT-001", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
-					"/uploads/laudos/exame001.pdf", ExamStatus.DISPONIVEL, professionalRepository.getById(2L), null, "Nenhum preparo necessario", null);
+			Exam e2 = new Exam("Hemoglobina Glicada", "PROT-002", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
+					"/uploads/laudos/exame001.pdf", ExamStatus.PROCESSANDO, professionalRepository.getById(2L), null, "Nenhum preparo necessario", null);
 
 			examRepository.saveAll(Arrays.asList(e1, e2));
 			

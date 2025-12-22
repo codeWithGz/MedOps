@@ -1,124 +1,83 @@
-const API_URL = 'https://medops-p8i0.onrender.com/exams'; 
-//const API_URL = 'http://localhost:8080/exams'; 
-let appointments = [];
+//const API_URL = 'https://medops-p8i0.onrender.com'; 
+const API_URL = 'http://localhost:8080/exams'; 
 
-const btnNovoAgendamento = document.getElementById('btnNovoAgendamento');
-const appointmentsList = document.getElementById('appointmentsList');
+let exams = [];
+
+const examsList = document.getElementById('examsList');
 const searchInput = document.getElementById('searchInput');
-const btnSearch = document.querySelector('.btn-search');
+
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAppointments();
+    fetchExams();
 });
 
-
-async function fetchAppointments() {
+async function fetchExams() {
     try {
-        appointmentsList.innerHTML = '<div class="loading">Carregando exames...</div>';
-
+        examsList.innerHTML = '<div class="no-appointments">Carregando exames...</div>';
         const response = await fetch(API_URL);
-
-        if (!response.ok) {
-            throw new Error('Erro ao buscar dados');
-        }
-
-        const data = await response.json();
+        if (!response.ok) throw new Error('Erro ao buscar exames');
         
-        appointments = data;
-        renderAppointments(appointments);
-
+        exams = await response.json();
+        renderExams(exams);
     } catch (error) {
         console.error('Erro:', error);
-        appointmentsList.innerHTML = '<div class="error">Erro ao carregar exames. Tente novamente mais tarde.</div>';
+        examsList.innerHTML = '<div class="no-appointments" style="color: red;">Erro ao conectar com o servidor.</div>';
     }
 }
 
-
-function formatDate(isoString) {
-    if (!isoString) return '--/--/----';
-    const date = new Date(isoString);
-    
-    return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-}
-
-function formatTime(isoString) {
-    if (!isoString) return '--:--';
-    const date = new Date(isoString);
-    return date.toLocaleTimeString('pt-BR', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        timeZone: 'UTC' 
-    });
-}
-
-function renderAppointments(appointmentsToRender) {
-    if (!appointmentsToRender || appointmentsToRender.length === 0) {
-        appointmentsList.innerHTML = '<div class="no-appointments">Nenhum exame encontrado</div>';
+function renderExams(examsToRender) {
+    if (!examsToRender || examsToRender.length === 0) {
+        examsList.innerHTML = '<div class="no-appointments">Nenhum exame encontrado</div>';
         return;
     }
 
-    appointmentsList.innerHTML = '';
+    examsList.innerHTML = '';
     
-    appointmentsToRender.forEach((appointment) => {
-        const appointmentItem = document.createElement('div');
-        appointmentItem.className = 'appointment-item';
-        
-        appointmentItem.innerHTML = `
-            <div class="appointment-left">
-                <div class="appointment-date">Data: ${formatDate(appointment.moment)}</div>
-                <div class="appointment-doctor"><strong>Médico:</strong> ${appointment.doctor.name}</div>
-                <div class="appointment-reason">Motivo: ${appointment.motive}</div>
-            </div>
-            <div class="appointment-right">
-                <div class="appointment-time">Horário: ${formatTime(appointment.moment)}</div>
-            </div>
-            <button class="delete-btn" onclick="deleteAppointment(${appointment.id})">Excluir</button>
-        `;
-        appointmentsList.appendChild(appointmentItem);
-    });
+	examsToRender.forEach((exam) => {
+	        const doctorName = exam.requestingDoctor ? exam.requestingDoctor.name : exam.externalDoctorName;
+	        const statusLabel = exam.examStatus; 
+	        const statusClass = `status-${statusLabel.toLowerCase()}`;
+
+	        const examItem = document.createElement('div');
+	        examItem.className = 'appointment-item'; 
+	        
+	        examItem.innerHTML = `
+	            <div class="appointment-left">
+	                <div class="appointment-date">${exam.examName}</div>
+	                <div class="exam-protocol">Protocolo: ${exam.protocolNumber}</div>
+	                <div class="appointment-doctor">Médico: ${doctorName}</div>
+	            </div>
+	            <div class="appointment-right" style="flex-direction: column; align-items: flex-end;">
+	                <div class="appointment-time">${formatDate(exam.executionDate)}</div>
+	                <div class="status-badge ${statusClass}">${statusLabel}</div>
+	                
+	                <div class="exam-actions" style="margin-top: 10px;">
+	                    ${exam.examStatus === 'DISPONIVEL' ? 
+	                        `<button class="btn-download" onclick="window.open('${exam.resultFilePath}')">Ver Laudo</button>` : 
+	                        '' 
+	                    }
+
+	                    ${(exam.examStatus !== 'DISPONIVEL' && exam.examStatus !== 'CANCELADO') ? 
+	                        `<button class="delete-btn" onclick="deleteExam(${exam.id})">Excluir</button>` : 
+	                        '' 
+	                    }
+	                </div>
+	            </div>
+	        `;
+	        examsList.appendChild(examItem);
+	    });
 }
 
-
-if (btnNovoAgendamento) {
-    btnNovoAgendamento.addEventListener('click', () => {
-        window.location.href = '/agendamento';
-    });
+function formatDate(isoString) {
+    if (!isoString) return '--/--/----';
+    return new Date(isoString).toLocaleDateString('pt-BR');
 }
 
-if (btnSearch) {
-    btnSearch.addEventListener('click', () => {
-        searchInput.classList.toggle('active');
-        if (searchInput.classList.contains('active')) {
-            searchInput.focus();
-        }
-    });
-}
-
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        
-        if (searchTerm === '') {
-            renderAppointments(appointments);
-            return;
-        }
-
-        const filteredAppointments = appointments.filter(appointment => {
-            const doctorName = appointment.doctor?.name?.toLowerCase() || '';
-            const motive = appointment.motive?.toLowerCase() || '';
-            const dateStr = formatDate(appointment.moment);
-            
-            return doctorName.includes(searchTerm) ||
-                   motive.includes(searchTerm) ||
-                   dateStr.includes(searchTerm);
-        });
-
-        renderAppointments(filteredAppointments);
-    });
-}
-
-const menuIcon = document.querySelector('.menu-icon');
-if (menuIcon) {
-    menuIcon.addEventListener('click', () => {
-        console.log('Menu clicado');
-    });
-}
+// Lógica de pesquisa simplificada para o PO
+searchInput.addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const filtered = exams.filter(ex => 
+        ex.examName.toLowerCase().includes(term) || 
+        (ex.externalDoctorName && ex.externalDoctorName.toLowerCase().includes(term))
+    );
+    renderExams(filtered);
+});

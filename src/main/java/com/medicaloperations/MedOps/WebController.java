@@ -26,6 +26,11 @@ public class WebController {
         return "agendamento"; 
     }
     
+    @GetMapping("/myexams")
+    public String exams() {
+        return "exams"; 
+    }
+    
     @GetMapping("/createaccount")
     public String createAccount() {
         return "createaccount"; 
