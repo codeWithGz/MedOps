@@ -75,8 +75,8 @@ async function deleteExam(id) {
             });
 
             if (response.ok) {
-                appointments = appointments.filter(appointment => appointment.id !== id);
-                renderAppointments(appointments);
+                exams = exams.filter(exam => exams.id !== id);
+                renderExams(exams);
                 alert('Exame excluído com sucesso!');
             } else {
                 alert('Erro ao excluir no servidor.');
