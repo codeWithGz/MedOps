@@ -66,7 +66,12 @@ public class TestConfig implements CommandLineRunner {
 					"/uploads/laudos/exame001.pdf", ExamStatus.PROCESSANDO, professionalRepository.getById(2L), 
 					pacientRepository.getById(1L), "Nenhum preparo necessario", null);
 
-			examRepository.saveAll(Arrays.asList(e1, e2));
+			@SuppressWarnings("deprecation")
+			Exam e3 = new Exam("Hemoglobina", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
+					"/uploads/laudos/exame001.pdf", ExamStatus.PROCESSANDO, professionalRepository.getById(2L), 
+					pacientRepository.getById(1L), "Nenhum preparo necessario", null);
+			
+			examRepository.saveAll(Arrays.asList(e1, e2, e3));
 			
 		}
 
