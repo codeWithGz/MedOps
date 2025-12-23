@@ -1,6 +1,6 @@
 // --- CONFIGURAÇÃO E ESTADO ---
-//const API_URL = 'https://medops-p8i0.onrender.com';
-const API_URL = 'http://localhost:8080';
+const API_URL = 'https://medops-p8i0.onrender.com';
+//const API_URL = 'http://localhost:8080';
 
 // Estado do calendário e seleção
 let state = {

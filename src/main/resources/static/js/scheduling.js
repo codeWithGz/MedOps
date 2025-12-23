@@ -1,5 +1,5 @@
-//const API_URL = 'https://medops-p8i0.onrender.com/consultations'; 
-const API_URL = 'http://localhost:8080/consultations'; 
+const API_URL = 'https://medops-p8i0.onrender.com/consultations'; 
+//const API_URL = 'http://localhost:8080/consultations'; 
 let appointments = [];
 
 const btnNovoAgendamento = document.getElementById('btnNovoAgendamento');

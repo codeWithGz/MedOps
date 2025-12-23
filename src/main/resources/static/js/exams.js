@@ -1,5 +1,5 @@
-//const API_URL = 'https://medops-p8i0.onrender.com/exams'; 
-const API_URL = 'http://localhost:8080/exams'; 
+const API_URL = 'https://medops-p8i0.onrender.com/exams'; 
+//const API_URL = 'http://localhost:8080/exams'; 
 
 let exams = [];
 
