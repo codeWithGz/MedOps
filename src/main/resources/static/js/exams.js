@@ -1,5 +1,5 @@
-const API_URL = 'https://medops-p8i0.onrender.com/exams'; 
-//const API_URL = 'http://localhost:8080/exams'; 
+//const API_URL = 'https://medops-p8i0.onrender.com/exams'; 
+const API_URL = 'http://localhost:8080/exams'; 
 
 let exams = [];
 
@@ -16,11 +16,36 @@ async function fetchExams() {
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('Erro ao buscar exames');
         
-        exams = await response.json();
+        const data = await response.json();
+        
+        exams = data;
         renderExams(exams);
+
     } catch (error) {
         console.error('Erro:', error);
         examsList.innerHTML = '<div class="no-appointments" style="color: red;">Erro ao conectar com o servidor.</div>';
+    }
+}
+
+async function deleteExam(id) {
+    if (confirm('Deseja realmente excluir este agendamento?')) {
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                exams = exams.filter(exam => exams.id !== id);
+                renderExams(exams);
+                alert('Exame excluído com sucesso!');
+				window.location.href = "/myexams";
+            } else {
+                alert('Erro ao excluir no servidor.');
+            }
+        } catch (error) {
+            console.error('Erro ao excluir:', error);
+            alert('Erro de conexão ao tentar excluir.');
+        }
     }
 }
 
@@ -65,27 +90,6 @@ function renderExams(examsToRender) {
 	        `;
 	        examsList.appendChild(examItem);
 	    });
-}
-
-async function deleteExam(id) {
-    if (confirm('Deseja realmente excluir este agendamento?')) {
-        try {
-            const response = await fetch(`${API_URL}/${id}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                exams = exams.filter(exam => exams.id !== id);
-                renderExams(exams);
-                alert('Exame excluído com sucesso!');
-            } else {
-                alert('Erro ao excluir no servidor.');
-            }
-        } catch (error) {
-            console.error('Erro ao excluir:', error);
-            alert('Erro de conexão ao tentar excluir.');
-        }
-    }
 }
 
 function formatDate(isoString) {
