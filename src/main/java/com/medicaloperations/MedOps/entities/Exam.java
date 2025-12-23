@@ -3,6 +3,7 @@ package com.medicaloperations.MedOps.entities;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -15,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,8 +27,35 @@ public class Exam implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String examName;
+	
+	@Column(unique = true)
 	private String protocolNumber;
+	
+	@PrePersist
+    private void generateProtocol() {
+        this.protocolNumber = generateRandomPattern();
+    }
+	
+	private String generateRandomPattern() {
+		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String numbers = "0123456789";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 4; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        sb.append("-");
+
+        for (int i = 0; i < 4; i++) {
+            sb.append(numbers.charAt(random.nextInt(numbers.length())));
+        }
+
+        return sb.toString();
+    }
+
+	private String examName;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant executionDate;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
@@ -49,12 +78,11 @@ public class Exam implements Serializable {
 	
 	public Exam() {}
 
-	public Exam(String examName, String protocolNumber, Instant executionDate, Instant resultReleaseDate,
+	public Exam(String examName, Instant executionDate, Instant resultReleaseDate,
 			String resultFilePath, ExamStatus examStatus, Doctor requestingDoctor, Pacient pacient, 
 			String preparationInstructions, String externalDoctorName) {
 		super();
 		this.examName = examName;
-		this.protocolNumber = protocolNumber;
 		this.executionDate = executionDate;
 		this.resultReleaseDate = resultReleaseDate;
 		this.resultFilePath = resultFilePath;

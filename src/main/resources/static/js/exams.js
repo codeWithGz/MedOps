@@ -96,7 +96,7 @@ function formatDate(isoString) {
 
 if (btnNovoExame) {
     btnNovoExame.addEventListener('click', () => {
-        window.location.href = '/pacientpannel'; // ainda tem que criar a pagina para marcar um novo exame
+        window.location.href = '/newexam'; 
     });
 }
 // Lógica de pesquisa simplificada para o PO

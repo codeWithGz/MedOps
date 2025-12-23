@@ -31,6 +31,11 @@ public class WebController {
         return "exams"; 
     }
     
+    @GetMapping("/newexam")
+    public String newExam() {
+        return "newExam"; 
+    }
+    
     @GetMapping("/createaccount")
     public String createAccount() {
         return "createaccount"; 

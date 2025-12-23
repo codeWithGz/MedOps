@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Profile;
 
 import com.medicaloperations.MedOps.entities.Doctor;
 import com.medicaloperations.MedOps.entities.Exam;
+import com.medicaloperations.MedOps.entities.Pacient;
 import com.medicaloperations.MedOps.entities.enums.AccountStatus;
 import com.medicaloperations.MedOps.entities.enums.ExamStatus;
 import com.medicaloperations.MedOps.entities.enums.Specialty;
 import com.medicaloperations.MedOps.repositories.DoctorRepository;
 import com.medicaloperations.MedOps.repositories.ExamRepository;
+import com.medicaloperations.MedOps.repositories.PacientRepository;
 
 @Configuration
 @Profile({"test", "prod"})
@@ -24,6 +26,9 @@ public class TestConfig implements CommandLineRunner {
 	private DoctorRepository professionalRepository;
 	
 	@Autowired
+	private PacientRepository pacientRepository;
+	
+	@Autowired
 	private ExamRepository examRepository;
 
 
@@ -31,6 +36,11 @@ public class TestConfig implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		if (pacientRepository.count() == 0) {
+			Pacient p1 = new Pacient(null, "Test", "test@test.com", "dasihofiqoaispfhasifha", AccountStatus.BLOCKED);
+			pacientRepository.saveAll(Arrays.asList(p1));
+		}
 		
 		if (professionalRepository.count() == 0) {
 			
@@ -45,12 +55,16 @@ public class TestConfig implements CommandLineRunner {
 		
 		if (examRepository.count() == 0) {
 			
-			Exam e1 = new Exam("Hemograma", "PROT-001", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
-								"/uploads/laudos/exame001.pdf", ExamStatus.DISPONIVEL, professionalRepository.getById(1L), null, "Nenhum preparo necessario", null);
+			@SuppressWarnings("deprecation")
+			Exam e1 = new Exam("Hemograma", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
+								"/uploads/laudos/exame001.pdf", ExamStatus.DISPONIVEL, professionalRepository.getById(1L),
+								pacientRepository.getById(1L), "Nenhum preparo necessario", null);
 
 			
-			Exam e2 = new Exam("Hemoglobina Glicada", "PROT-002", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
-					"/uploads/laudos/exame001.pdf", ExamStatus.PROCESSANDO, professionalRepository.getById(2L), null, "Nenhum preparo necessario", null);
+			@SuppressWarnings("deprecation")
+			Exam e2 = new Exam("Hemoglobina Glicada", Instant.parse("2023-10-20T10:00:00Z"), Instant.parse("2023-10-21T15:00:00Z"), 
+					"/uploads/laudos/exame001.pdf", ExamStatus.PROCESSANDO, professionalRepository.getById(2L), 
+					pacientRepository.getById(1L), "Nenhum preparo necessario", null);
 
 			examRepository.saveAll(Arrays.asList(e1, e2));
 			
