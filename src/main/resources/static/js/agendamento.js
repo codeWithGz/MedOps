@@ -294,6 +294,7 @@ async function confirmarAgendamento() {
 
         if (response.ok) {
             alert("Consulta agendada com sucesso!");
+			window.location.href = "/myschedule";
            
         } else {
             const errorText = await response.text();
